@@ -105,12 +105,14 @@ public class Gui extends Application {
 				default: break;
 				}
 			});
-			
+
+			/*
             // Putting default players on screen
 			for (int i=0;i<GameLogic.players.size();i++) {
 			  fields[GameLogic.players.get(i).getXpos()][GameLogic.players.get(i).getYpos()].setGraphic(new ImageView(hero_up));
 			}
 			scoreList.setText(getScoreList());
+			 */
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -146,20 +148,21 @@ public class Gui extends Application {
 		removePlayerOnScreen(oldpos);
 		placePlayerOnScreen(newpos,direction);
 	}
-	
 
-	
+	public void playerMoved(int delta_x, int delta_y, String direction) {
+		//GameLogic.updatePlayer(delta_x,delta_y,direction); - Kald til server, at spiller vil flytte sig
+		//updateScoreTable();
+	}
+
+	/*
+
 	public void updateScoreTable()
 	{
 		Platform.runLater(() -> {
 			scoreList.setText(getScoreList());
 			});
 	}
-	public void playerMoved(int delta_x, int delta_y, String direction) {
-		GameLogic.updatePlayer(delta_x,delta_y,direction);
-		updateScoreTable();
-	}
-	
+
 	public String getScoreList() {
 		StringBuffer b = new StringBuffer(100);
 		for (Player p : GameLogic.players) {
@@ -167,6 +170,7 @@ public class Gui extends Application {
 		}
 		return b.toString();
 	}
+	 */
 
 
 

@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="package update" />
+    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="iml and xml">
+      <change afterPath="$PROJECT_DIR$/src/Client/game/Controller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Client/game/ThreadIn.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Server/ConcurrentArrayList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Server/GameLogic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Server/Generel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Server/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Server/pair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/game/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/game/GameLogic.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/game/Gui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Gui.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
@@ -22,10 +49,11 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.App.executor": "Run",
+    "Application.Server.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
+    "git-widget-placeholder": "dev",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2"
   }
 }]]></component>
@@ -33,6 +61,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="package update" />
-    <option name="LAST_COMMIT_MESSAGE" value="package update" />
+    <MESSAGE value="iml and xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="iml and xml" />
   </component>
 </project>
