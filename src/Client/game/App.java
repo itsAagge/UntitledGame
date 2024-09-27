@@ -19,7 +19,6 @@ public class App {
 		// Sends the socket to the controller for communication with the server
 		Controller.startController(clientSocket);
 
-
 		System.out.println("Indtast spillernavn");
 		playerName = inFromUser.readLine();
 		Controller.requestPlayerAddToGame(playerName);

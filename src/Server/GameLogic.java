@@ -1,15 +1,18 @@
 package Server;
 
+import org.json.JSONObject;
+
 import java.util.*;
 
 public class GameLogic {
     public static HashMap<Integer, ServerPlayer> players = new HashMap<>();
 
-    public static int addPlayer(String name) {
-        pair p=getRandomFreePosition();
+    public synchronized static ServerPlayer addPlayer(String name) {
+        pair p = getRandomFreePosition();
+        System.out.println("Position to add = x: " + p.x + ", y: " + p.y);
         ServerPlayer player = new ServerPlayer(name,p,"up");
         players.put(player.getId(), player);
-        return player.getId();
+        return player;
     }
 
     public static pair getRandomFreePosition()
@@ -37,7 +40,7 @@ public class GameLogic {
         return p;
     }
 
-    public static void updatePlayer(int id, int delta_x, int delta_y, String direction) {
+    public synchronized static void updatePlayer(int id, int delta_x, int delta_y, String direction) {
         ServerPlayer player = players.get(id);
         if (player == null) throw new IllegalArgumentException("Player doesn't exist");
 
@@ -57,13 +60,18 @@ public class GameLogic {
                 pair pa = getRandomFreePosition();
                 p.setLocation(pa);
                 pair oldpos = new pair(x+delta_x,y+delta_y);
+
                 //Gui.movePlayerOnScreen(oldpos,pa,p.direction);
-            } else
+                Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, pa, direction));
+            } else {
                 player.addPoints(1);
-            pair oldpos = player.getLocation();
-            pair newpos = new pair(x+delta_x,y+delta_y);
-            //Gui.movePlayerOnScreen(oldpos,newpos,direction); // Skal muligvis returnere en ny position, som tråden kan samle op og sende tilbage
-            player.setLocation(newpos);
+                pair oldpos = player.getLocation();
+                pair newpos = new pair(x + delta_x, y + delta_y);
+
+                //Gui.movePlayerOnScreen(oldpos,newpos,direction); // Skal muligvis returnere en ny position, som tråden kan samle op og sende tilbage
+                Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, newpos, direction));
+                player.setLocation(newpos);
+            }
         }
     }
 
@@ -76,7 +84,29 @@ public class GameLogic {
         return null;
     }
 
+    public static JSONObject createPlayerMoveJSON(pair oldpos, pair newpos, String direction) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("MessageType", "Update");
+        jsonObject.put("UpdateType", "PlayerMoved");
+        jsonObject.put("PlayerOldXPos", oldpos.x);
+        jsonObject.put("PlayerOldYPos", oldpos.y);
+        jsonObject.put("PlayerNewXPos", newpos.x);
+        jsonObject.put("PlayerNewYPos", newpos.y);
+        jsonObject.put("PlayerDirection", direction);
 
+        return jsonObject;
+    }
+
+    public static JSONObject createPlayerAddedJSON(pair pos, String direction) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("MessageType", "Update");
+        jsonObject.put("UpdateType", "PlayerAdded");
+        jsonObject.put("PlayerXPos", pos.x);
+        jsonObject.put("PlayerYPos", pos.y);
+        jsonObject.put("PlayerDirection", direction);
+
+        return jsonObject;
+    }
 
 
 }

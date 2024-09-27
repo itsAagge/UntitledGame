@@ -105,14 +105,6 @@ public class Gui extends Application {
 				default: break;
 				}
 			});
-
-			/*
-            // Putting default players on screen
-			for (int i=0;i<GameLogic.players.size();i++) {
-			  fields[GameLogic.players.get(i).getXpos()][GameLogic.players.get(i).getYpos()].setGraphic(new ImageView(hero_up));
-			}
-			scoreList.setText(getScoreList());
-			 */
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -124,7 +116,7 @@ public class Gui extends Application {
 			});
 	}
 	
-	public static void placePlayerOnScreen(pair newpos,String direction) {
+	public static void placePlayerOnScreen(pair newpos, String direction) {
 		Platform.runLater(() -> {
 			int newx = newpos.getX();
 			int newy = newpos.getY();
@@ -143,15 +135,20 @@ public class Gui extends Application {
 			});
 	}
 	
-	public static void movePlayerOnScreen(pair oldpos,pair newpos,String direction)
+	public static void movePlayerOnScreen(pair oldpos, pair newpos, String direction)
 	{
 		removePlayerOnScreen(oldpos);
 		placePlayerOnScreen(newpos,direction);
 	}
 
 	public void playerMoved(int delta_x, int delta_y, String direction) {
-		//GameLogic.updatePlayer(delta_x,delta_y,direction); - Kald til server, at spiller vil flytte sig
-		Controller.requestPlayerMove(delta_x,delta_y,direction);
+		try {
+			int playerId = Controller.getPlayerId();
+			System.out.println("Player " + playerId + " wants to move " + delta_x + " to horizontal and " + delta_y + " vertical, facing " + direction);
+			Controller.requestPlayerMove(playerId, delta_x, delta_y, direction);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 		//updateScoreTable();
 	}
 
