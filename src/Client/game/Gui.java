@@ -151,6 +151,7 @@ public class Gui extends Application {
 
 	public void playerMoved(int delta_x, int delta_y, String direction) {
 		//GameLogic.updatePlayer(delta_x,delta_y,direction); - Kald til server, at spiller vil flytte sig
+		Controller.requestPlayerMove(delta_x,delta_y,direction);
 		//updateScoreTable();
 	}
 

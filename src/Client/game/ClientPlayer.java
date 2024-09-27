@@ -1,16 +1,18 @@
 package Client.game;
 
-public class Player {
+public class ClientPlayer {
 	String name;
 	pair location;
 	int point;
 	String direction;
+	int id;
 
-	public Player(String name, pair loc, String direction) {
+	public ClientPlayer(String name, pair loc, String direction, int id) {
 		this.name = name;
 		this.location = loc;
 		this.direction = direction;
 		this.point = 0;
+		this.id = id;
 	};
 	
 	public pair getLocation() {

@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ConcurrentArrayList implements Iterable<Player>
+public class ConcurrentArrayList implements Iterable<ClientPlayer>
 {
-	private List<Player> liste = new ArrayList<Player>(); 
+	private List<ClientPlayer> liste = new ArrayList<ClientPlayer>();
 	
-	public void add(Player p) {
+	public void add(ClientPlayer p) {
 		liste.add(p);	
 	}
 
-	public void remove(Player p) {
+	public void remove(ClientPlayer p) {
 		liste.remove(p);	
 	}
 	
@@ -25,7 +25,7 @@ public class ConcurrentArrayList implements Iterable<Player>
 	}
 
 	@Override
-	public Iterator<Player> iterator() {
+	public Iterator<ClientPlayer> iterator() {
 		// TODO Auto-generated method stub
 		return liste.iterator();
 	}

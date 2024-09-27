@@ -1,20 +1,18 @@
 package Server;
 
-import Server.Player;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ConcurrentArrayList implements Iterable<Player>
+public class ConcurrentArrayList implements Iterable<ServerPlayer>
 {
-    private List<Player> liste = new ArrayList<>();
+    private List<ServerPlayer> liste = new ArrayList<>();
 
-    public void add(Player p) {
+    public void add(ServerPlayer p) {
         liste.add(p);
     }
 
-    public void remove(Player p) {
+    public void remove(ServerPlayer p) {
         liste.remove(p);
     }
 
@@ -27,7 +25,7 @@ public class ConcurrentArrayList implements Iterable<Player>
     }
 
     @Override
-    public Iterator<Player> iterator() {
+    public Iterator<ServerPlayer> iterator() {
         // TODO Auto-generated method stub
         return liste.iterator();
     }

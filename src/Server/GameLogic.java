@@ -1,27 +1,15 @@
 package Server;
 
-import Server.Generel;
-import Server.Player;
-import Server.pair;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-
+import java.util.*;
 
 public class GameLogic {
-    public static List<Player> players = new ArrayList<>();
-    public static Player me;
+    public static HashMap<Integer, ServerPlayer> players = new HashMap<>();
 
-
-    public static void makePlayers(String name) {
+    public static int addPlayer(String name) {
         pair p=getRandomFreePosition();
-        me = new Player(name,p,"up");
-        players.add(me);
-        p=getRandomFreePosition();
-        Player harry = new Player("Kaj",p,"up");
-        players.add(harry);
+        ServerPlayer player = new ServerPlayer(name,p,"up");
+        players.put(player.getId(), player);
+        return player.getId();
     }
 
     public static pair getRandomFreePosition()
@@ -38,7 +26,7 @@ public class GameLogic {
             if (Generel.board[y].charAt(x)==' ') // er det gulv ?
             {
                 foundfreepos = true;
-                for (Player p: players) {
+                for (ServerPlayer p: players.values()) {
                     if (p.getXpos()==x && p.getYpos()==y) //pladsen optaget af en anden
                         foundfreepos = false;
                 }
@@ -49,19 +37,21 @@ public class GameLogic {
         return p;
     }
 
-    public static void updatePlayer(int delta_x, int delta_y, String direction)
-    {
-        me.direction = direction;
-        int x = me.getXpos(),y = me.getYpos();
+    public static void updatePlayer(int id, int delta_x, int delta_y, String direction) {
+        ServerPlayer player = players.get(id);
+        if (player == null) throw new IllegalArgumentException("Player doesn't exist");
+
+        player.direction = direction;
+        int x = player.getXpos(),y = player.getYpos();
 
         if (Generel.board[y+delta_y].charAt(x+delta_x)=='w') {
-            me.addPoints(-1);
+            player.addPoints(-1);
         }
         else {
             // collision detection
-            Player p = getPlayerAt(x+delta_x,y+delta_y);
+            ServerPlayer p = getPlayerAt(x+delta_x,y+delta_y);
             if (p!=null) {
-                me.addPoints(10);
+                player.addPoints(10);
                 //update the other player
                 p.addPoints(-10);
                 pair pa = getRandomFreePosition();
@@ -69,18 +59,16 @@ public class GameLogic {
                 pair oldpos = new pair(x+delta_x,y+delta_y);
                 //Gui.movePlayerOnScreen(oldpos,pa,p.direction);
             } else
-                me.addPoints(1);
-            pair oldpos = me.getLocation();
+                player.addPoints(1);
+            pair oldpos = player.getLocation();
             pair newpos = new pair(x+delta_x,y+delta_y);
-            //Gui.movePlayerOnScreen(oldpos,newpos,direction);
-            me.setLocation(newpos);
+            //Gui.movePlayerOnScreen(oldpos,newpos,direction); // Skal muligvis returnere en ny position, som tråden kan samle op og sende tilbage
+            player.setLocation(newpos);
         }
-
-
     }
 
-    public static Player getPlayerAt(int x, int y) {
-        for (Player p : players) {
+    public static ServerPlayer getPlayerAt(int x, int y) {
+        for (ServerPlayer p : players.values()) {
             if (p.getXpos()==x && p.getYpos()==y) {
                 return p;
             }

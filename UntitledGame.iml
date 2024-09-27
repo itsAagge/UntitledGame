@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="JavaFX 21" level="application" />
+    <orderEntry type="library" exported="" name="JSON" level="application" />
   </component>
 </module>
