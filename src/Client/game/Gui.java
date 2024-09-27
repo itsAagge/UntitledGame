@@ -1,4 +1,4 @@
-package game;
+package Client.game;
 
 import java.util.*;
 import java.util.List;

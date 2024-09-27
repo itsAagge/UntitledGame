@@ -1,4 +1,4 @@
-package game;
+package Client.game;
 
 import java.net.*;
 import java.io.*;
