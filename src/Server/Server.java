@@ -22,7 +22,7 @@ public class Server {
 	public static void sendUpdateToClients(JSONObject update) {
 		try {
 			for (DataOutputStream dataOutputStream : connections.values()) {
-				dataOutputStream.writeBytes(update + "\n");
+				dataOutputStream.writeBytes(update.toString() + "\n");
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);

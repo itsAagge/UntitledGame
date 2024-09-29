@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="JSON added and player storage in GameLogic changed to HashMap&lt;Integer (the player id), Player (the player)&gt; for ease of search">
+    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Network works yo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client/game/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client/game/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client/game/Gui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Gui.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client/game/ThreadIn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/ClientThreadIn.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/GameLogic.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/ServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ServerThreadIn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/ServerThreadIn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ServerThreadIn.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +59,7 @@
     <MESSAGE value="package update" />
     <MESSAGE value="iml and xml" />
     <MESSAGE value="JSON added and player storage in GameLogic changed to HashMap&lt;Integer (the player id), Player (the player)&gt; for ease of search" />
-    <option name="LAST_COMMIT_MESSAGE" value="JSON added and player storage in GameLogic changed to HashMap&lt;Integer (the player id), Player (the player)&gt; for ease of search" />
+    <MESSAGE value="Network works yo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Network works yo" />
   </component>
 </project>

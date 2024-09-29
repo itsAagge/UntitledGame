@@ -1,16 +1,19 @@
 package Client.game;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Controller {
     private static Socket clientSocket;
     private static DataOutputStream outToServer;
     private static ClientThreadIn threadInFromServer;
     private static int playerId;
+    private static ArrayList<pair> playersOnScreen = new ArrayList<>();
 
     public static void startController(Socket clientSocket) throws Exception {
         Controller.clientSocket = clientSocket;
@@ -31,7 +34,7 @@ public class Controller {
         JSONObject jsonObject = new JSONObject(gamestate);
         String updateType = jsonObject.getString("UpdateType");
         switch (updateType) {
-            case ("PlayerAdded") -> {
+            case ("PlayerAdded") -> { // Send update -- overvej at slette
                 System.out.println("Player added");
                 pair pos = new pair(0,0);
                 pos.x = jsonObject.getInt("PlayerXPos");
@@ -41,7 +44,7 @@ public class Controller {
                 System.out.println("Adding player to x: " + pos.x + ", y: " + pos.y);
                 Gui.placePlayerOnScreen(pos, direction);
             }
-            case ("PlayerMoved") -> {
+            case ("PlayerMoved") -> { // Send update -- overvej at slette
                 pair oldpos = new pair(0,0);
                 oldpos.x = jsonObject.getInt("PlayerOldXPos");
                 oldpos.y = jsonObject.getInt("PlayerOldYPos");
@@ -51,6 +54,23 @@ public class Controller {
                 String direction = jsonObject.getString("PlayerDirection");
 
                 Gui.movePlayerOnScreen(oldpos, newpos, direction);
+            }
+            case ("Gamestate") -> { // Send gamestate
+                for (pair pair : playersOnScreen) {
+                    Gui.removePlayerOnScreen(pair);
+                }
+                playersOnScreen.clear();
+                JSONArray jsonArray = jsonObject.getJSONArray("PlayerArray");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonPlayer = jsonArray.getJSONObject(i);
+                    pair pos = new pair(0,0);
+                    pos.x = jsonPlayer.getInt("PlayerXPos");
+                    pos.y = jsonPlayer.getInt("PlayerYPos");
+                    String direction = jsonPlayer.getString("PlayerDirection");
+
+                    playersOnScreen.add(pos);
+                    Gui.placePlayerOnScreen(pos, direction);
+                }
             }
         }
     }

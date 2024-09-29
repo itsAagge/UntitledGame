@@ -1,5 +1,6 @@
 package Server;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -61,16 +62,16 @@ public class GameLogic {
                 p.setLocation(pa);
                 pair oldpos = new pair(x+delta_x,y+delta_y);
 
-                //Gui.movePlayerOnScreen(oldpos,pa,p.direction);
-                Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, pa, direction));
+                //Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, pa, direction)); // Send update
+                Server.sendUpdateToClients(createGamestateJSON()); // Send gamestate
             } else {
                 player.addPoints(1);
                 pair oldpos = player.getLocation();
                 pair newpos = new pair(x + delta_x, y + delta_y);
-
-                //Gui.movePlayerOnScreen(oldpos,newpos,direction); // Skal muligvis returnere en ny position, som tråden kan samle op og sende tilbage
-                Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, newpos, direction));
                 player.setLocation(newpos);
+
+                //Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, newpos, direction)); // Send update
+                Server.sendUpdateToClients(createGamestateJSON()); // Send gamestate
             }
         }
     }
@@ -84,7 +85,8 @@ public class GameLogic {
         return null;
     }
 
-    public static JSONObject createPlayerMoveJSON(pair oldpos, pair newpos, String direction) {
+    /*
+    public static JSONObject createPlayerMoveJSON(pair oldpos, pair newpos, String direction) { // Send update
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("MessageType", "Update");
         jsonObject.put("UpdateType", "PlayerMoved");
@@ -97,13 +99,33 @@ public class GameLogic {
         return jsonObject;
     }
 
-    public static JSONObject createPlayerAddedJSON(pair pos, String direction) {
+    public static JSONObject createPlayerAddedJSON(pair pos, String direction) { // Send update
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("MessageType", "Update");
         jsonObject.put("UpdateType", "PlayerAdded");
         jsonObject.put("PlayerXPos", pos.x);
         jsonObject.put("PlayerYPos", pos.y);
         jsonObject.put("PlayerDirection", direction);
+
+        return jsonObject;
+    }
+     */
+
+    public static JSONObject createGamestateJSON() { // Send gamestate
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("MessageType", "Update");
+        jsonObject.put("UpdateType", "Gamestate");
+
+        //JSON Array for the players
+        JSONArray jsonArray = new JSONArray();
+        for (ServerPlayer player : players.values()) {
+            JSONObject jsonPlayer = new JSONObject();
+            jsonPlayer.put("PlayerXPos", player.getXpos());
+            jsonPlayer.put("PlayerYPos", player.getYpos());
+            jsonPlayer.put("PlayerDirection", player.getDirection());
+            jsonArray.put(jsonPlayer);
+        }
+        jsonObject.put("PlayerArray", jsonArray);
 
         return jsonObject;
     }
