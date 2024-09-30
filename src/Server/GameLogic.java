@@ -8,6 +8,8 @@ import java.util.*;
 public class GameLogic {
     public static HashMap<Integer, ServerPlayer> players = new HashMap<>();
 
+    public static ArrayList<PowerUp> powerUpList = new ArrayList<>();
+
     public synchronized static ServerPlayer addPlayer(String name) {
         pair p = getRandomFreePosition();
         System.out.println("Position to add = x: " + p.x + ", y: " + p.y);
@@ -34,6 +36,11 @@ public class GameLogic {
                     if (p.getXpos()==x && p.getYpos()==y) //pladsen optaget af en anden
                         foundfreepos = false;
                 }
+                for (PowerUp p: powerUpList) {
+                    if (p.getXpos() == x && p.getYpos() == y) {
+                        foundfreepos = false;
+                    }
+                }
 
             }
         }
@@ -49,23 +56,34 @@ public class GameLogic {
         int x = player.getXpos(),y = player.getYpos();
 
         if (Generel.board[y+delta_y].charAt(x+delta_x)=='w') {
-            player.addPoints(-1);
+            //player.addPoints(-1);
         }
         else {
             // collision detection
             ServerPlayer p = getPlayerAt(x+delta_x,y+delta_y);
+            PowerUp pUp = getPowerUpAt(x+delta_x, y+delta_y);
             if (p!=null) {
-                player.addPoints(10);
+                player.addPoints(14);
                 //update the other player
-                p.addPoints(-10);
+                p.addPoints(-7);
                 pair pa = getRandomFreePosition();
                 p.setLocation(pa);
                 pair oldpos = new pair(x+delta_x,y+delta_y);
 
                 //Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, pa, direction)); // Send update
                 Server.sendUpdateToClients(createGamestateJSON(-1)); // Send gamestate
+            } else if (pUp != null) {
+                if (pUp.getName().equals("Plus 10 points")) {
+                    player.addPoints(10);
+                } else if (pUp.getName().equals("Teleport random")) {
+                    pair pa = getRandomFreePosition();
+                    player.setLocation(pa);
+                } else if (pUp.getName().equals("Andrew går ned på alle 4")) {
+
+                    player.addPoints(10000);
+                }
             } else {
-                player.addPoints(1);
+                //player.addPoints(1);
                 pair oldpos = player.getLocation();
                 pair newpos = new pair(x + delta_x, y + delta_y);
                 player.setLocation(newpos);
@@ -137,8 +155,8 @@ public class GameLogic {
             }
         }
         if (playerHit != null) {
-            player.addPoints(50);
-            playerHit.addPoints(-50);
+            player.addPoints(10);
+            playerHit.addPoints(-5);
 
             pair pa = getRandomFreePosition();
             playerHit.setLocation(pa);
@@ -157,6 +175,15 @@ public class GameLogic {
     public static ServerPlayer getPlayerAt(int x, int y) {
         for (ServerPlayer p : players.values()) {
             if (p.getXpos()==x && p.getYpos()==y) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public static PowerUp getPowerUpAt(int x, int y) {
+        for (PowerUp p : powerUpList) {
+            if (p.getXpos() == x && p.getYpos() == y) {
                 return p;
             }
         }
