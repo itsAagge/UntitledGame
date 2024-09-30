@@ -14,6 +14,7 @@ public class Controller {
     private static ClientThreadIn threadInFromServer;
     private static int playerId;
     private static ArrayList<pair> playersOnScreen = new ArrayList<>();
+    public static ArrayList<pair> tempShotPairs = new ArrayList<>();
 
     public static void startController(Socket clientSocket) throws Exception {
         Controller.clientSocket = clientSocket;
@@ -56,6 +57,9 @@ public class Controller {
                 Gui.movePlayerOnScreen(oldpos, newpos, direction);
             }
             case ("Gamestate") -> { // Send gamestate
+                Gui.removeAllShots();
+                pair shooterPair = null;
+                String shooterDirection = "";
                 for (pair pair : playersOnScreen) {
                     Gui.removePlayerOnScreen(pair);
                 }
@@ -67,9 +71,16 @@ public class Controller {
                     pos.x = jsonPlayer.getInt("PlayerXPos");
                     pos.y = jsonPlayer.getInt("PlayerYPos");
                     String direction = jsonPlayer.getString("PlayerDirection");
+                    if (jsonPlayer.getBoolean("PlayerShooting")) {
+                        shooterPair = pos;
+                        shooterDirection = direction;
+                    }
 
                     playersOnScreen.add(pos);
                     Gui.placePlayerOnScreen(pos, direction);
+                }
+                if (shooterPair != null) {
+                    Gui.shoot(shooterPair, shooterDirection);
                 }
             }
         }
@@ -92,6 +103,15 @@ public class Controller {
         jsonObject.put("PlayerDeltaX", deltaX);
         jsonObject.put("PlayerDeltaY", deltaY);
         jsonObject.put("PlayerDirection", direction);
+
+        outToServer.writeBytes(jsonObject.toString() + "\n");
+    }
+
+    public static void requestPlayerShoot(int id) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("MessageType", "Request");
+        jsonObject.put("RequestType", "PlayerShoot");
+        jsonObject.put("PlayerId", id);
 
         outToServer.writeBytes(jsonObject.toString() + "\n");
     }

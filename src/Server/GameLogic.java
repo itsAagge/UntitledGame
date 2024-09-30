@@ -63,7 +63,7 @@ public class GameLogic {
                 pair oldpos = new pair(x+delta_x,y+delta_y);
 
                 //Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, pa, direction)); // Send update
-                Server.sendUpdateToClients(createGamestateJSON()); // Send gamestate
+                Server.sendUpdateToClients(createGamestateJSON(-1)); // Send gamestate
             } else {
                 player.addPoints(1);
                 pair oldpos = player.getLocation();
@@ -71,9 +71,87 @@ public class GameLogic {
                 player.setLocation(newpos);
 
                 //Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, newpos, direction)); // Send update
-                Server.sendUpdateToClients(createGamestateJSON()); // Send gamestate
+                Server.sendUpdateToClients(createGamestateJSON(-1)); // Send gamestate
             }
         }
+    }
+
+    public synchronized static void shoot(int id) {
+        ServerPlayer player = players.get(id);
+        if (player == null) throw new IllegalArgumentException("Player doesn't exist");
+
+        int x = player.getXpos(), y = player.getYpos();
+        String direction = player.getDirection();
+
+        int checkAt = 0;
+        boolean hitWallOrPlayer = false;
+        ServerPlayer playerHit = null;
+
+        if (direction.equals("up")) {
+            checkAt = y - 1;
+            while (!hitWallOrPlayer && checkAt >= 1) {
+                if (getPlayerAt(x, checkAt) != null) {
+                    hitWallOrPlayer = true;
+                    playerHit = getPlayerAt(x, checkAt);
+                } else if (Generel.board[checkAt].charAt(x) == 'w') {
+                    hitWallOrPlayer = true;
+                } else {
+                    checkAt--;
+                }
+            }
+        } else if (direction.equals("down")) {
+            checkAt = y + 1;
+            while (!hitWallOrPlayer && checkAt <= 19) {
+                if (getPlayerAt(x, checkAt) != null) {
+                    hitWallOrPlayer = true;
+                    playerHit = getPlayerAt(x, checkAt);
+                } else if (Generel.board[checkAt].charAt(x) == 'w') {
+                    hitWallOrPlayer = true;
+                } else {
+                    checkAt++;
+                }
+            }
+        } else if (direction.equals("right")) {
+            checkAt = x + 1;
+            while (!hitWallOrPlayer && checkAt <= 19) {
+                if (getPlayerAt(checkAt, y) != null) {
+                    hitWallOrPlayer = true;
+                    playerHit = getPlayerAt(checkAt, y);
+                } else if (Generel.board[x].charAt(checkAt) == 'w') {
+                    hitWallOrPlayer = true;
+                } else {
+                    checkAt++;
+                }
+            }
+        } else if (direction.equals("left")) {
+            checkAt = x - 1;
+            while (!hitWallOrPlayer && checkAt >= 1) {
+                if (getPlayerAt(checkAt, y) != null) {
+                    hitWallOrPlayer = true;
+                    playerHit = getPlayerAt(checkAt, y);
+                } else if (Generel.board[x].charAt(checkAt) == 'w') {
+                    hitWallOrPlayer = true;
+                } else {
+                    checkAt--;
+                }
+            }
+        }
+        if (playerHit != null) {
+            player.addPoints(50);
+            playerHit.addPoints(-50);
+
+            pair pa = getRandomFreePosition();
+            playerHit.setLocation(pa);
+        }
+        Server.sendUpdateToClients(createGamestateJSON(id));
+        System.out.println("Shooting");
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Server.sendUpdateToClients(createGamestateJSON(-1));
+        System.out.println("Done");
     }
 
     public static ServerPlayer getPlayerAt(int x, int y) {
@@ -111,7 +189,7 @@ public class GameLogic {
     }
      */
 
-    public static JSONObject createGamestateJSON() { // Send gamestate
+    public static JSONObject createGamestateJSON(int shooterId) { // Send gamestate
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("MessageType", "Update");
         jsonObject.put("UpdateType", "Gamestate");
@@ -123,6 +201,8 @@ public class GameLogic {
             jsonPlayer.put("PlayerXPos", player.getXpos());
             jsonPlayer.put("PlayerYPos", player.getYpos());
             jsonPlayer.put("PlayerDirection", player.getDirection());
+            boolean isShooting = player.getId() == shooterId;
+            jsonPlayer.put("PlayerShooting", isShooting);
             jsonArray.put(jsonPlayer);
         }
         jsonObject.put("PlayerArray", jsonArray);

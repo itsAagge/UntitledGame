@@ -24,8 +24,9 @@ public class Gui extends Application {
 	public static Image image_floor;
 	public static Image image_wall;
 	public static Image hero_right,hero_left,hero_up,hero_down;
+	public static Image shoot_up,shoot_down,shoot_right,shoot_left,shoot_vertical,shoot_horizontal;
+	public static Image shoot_up_hit,shoot_down_hit,shoot_right_hit,shoot_left_hit;
 
-	
 
 	private static Label[][] fields;
 	private TextArea scoreList;
@@ -68,6 +69,18 @@ public class Gui extends Application {
 			hero_up     = new Image(getClass().getResourceAsStream("Image/heroUp.png"),size,size,false,false);
 			hero_down   = new Image(getClass().getResourceAsStream("Image/heroDown.png"),size,size,false,false);
 
+			shoot_up          = new Image(getClass().getResourceAsStream("Image/fireUp.png"),size,size,false,false);
+			shoot_down        = new Image(getClass().getResourceAsStream("Image/fireDown.png"),size,size,false,false);
+			shoot_right       = new Image(getClass().getResourceAsStream("Image/fireRight.png"),size,size,false,false);
+			shoot_left        = new Image(getClass().getResourceAsStream("Image/fireLeft.png"),size,size,false,false);
+			shoot_vertical    = new Image(getClass().getResourceAsStream("Image/fireVertical.png"),size,size,false,false);
+			shoot_horizontal  = new Image(getClass().getResourceAsStream("Image/fireHorizontal.png"),size,size,false,false);
+
+			shoot_up_hit      = new Image(getClass().getResourceAsStream("Image/fireWallNorth.png"),size,size,false,false);
+			shoot_down_hit    = new Image(getClass().getResourceAsStream("Image/fireWallSouth.png"),size,size,false,false);
+			shoot_right_hit   = new Image(getClass().getResourceAsStream("Image/fireWallEast.png"),size,size,false,false);
+			shoot_left_hit    = new Image(getClass().getResourceAsStream("Image/fireWallWest.png"),size,size,false,false);
+
 			fields = new Label[20][20];
 			for (int j=0; j<20; j++) {
 				for (int i=0; i<20; i++) {
@@ -101,6 +114,7 @@ public class Gui extends Application {
 				case DOWN:  playerMoved(0,+1,"down");  break;
 				case LEFT:  playerMoved(-1,0,"left");  break;
 				case RIGHT: playerMoved(+1,0,"right"); break;
+				case SPACE: playerShoot(); break;
 				case ESCAPE:System.exit(0); 
 				default: break;
 				}
@@ -150,6 +164,135 @@ public class Gui extends Application {
 			throw new RuntimeException(e);
 		}
 		//updateScoreTable();
+	}
+
+	public static void removeAllShots() {
+		Platform.runLater(() -> {
+			if (!Controller.tempShotPairs.isEmpty()) {
+				for (pair tempShotPair : Controller.tempShotPairs) {
+					fields[tempShotPair.getX()][tempShotPair.getY()].setGraphic(new ImageView(image_floor));
+				}
+			}
+		});
+	}
+
+	public static void shoot(pair pos, String direction) {
+		Platform.runLater(() -> {
+			System.out.println("Shooting " + direction + " from x: " + pos.getX() + ", y: " + pos.getY());
+			
+			boolean shootingAnnulled = false;
+			boolean hitWall = false;
+			int x = pos.getX(), y = pos.getY();
+			int checkAt = 0;
+			pair shootHere = null;
+			
+			if (direction.equals("up")) {
+				checkAt = y - 1;
+				if (Generel.board[checkAt].charAt(x) != 'w') {
+					shootHere = new pair(x, checkAt);
+					Controller.tempShotPairs.add(shootHere);
+					fields[x][checkAt].setGraphic(new ImageView(shoot_up));
+					checkAt--;
+				} else {
+					hitWall = true;
+					shootingAnnulled = true;
+				}
+				while (!hitWall && checkAt >= 1) {
+					if (Generel.board[checkAt].charAt(x) == 'w') {
+						hitWall = true;
+					} else {
+						shootHere = new pair(x, checkAt);
+						Controller.tempShotPairs.add(shootHere);
+						fields[x][checkAt].setGraphic(new ImageView(shoot_vertical));
+						checkAt--;
+					}
+				}
+				if (!shootingAnnulled) {
+					fields[x][++checkAt].setGraphic(new ImageView(shoot_up_hit));
+				}
+			} else if (direction.equals("down")) {
+				checkAt = y + 1;
+				if (Generel.board[checkAt].charAt(x) != 'w') {
+					shootHere = new pair(x, checkAt);
+					Controller.tempShotPairs.add(shootHere);
+					fields[x][checkAt].setGraphic(new ImageView(shoot_down));
+					checkAt++;
+				} else {
+					hitWall = true;
+					shootingAnnulled = true;
+				}
+				while (!hitWall && checkAt <= 19) {
+					if (Generel.board[checkAt].charAt(x) == 'w') {
+						hitWall = true;
+					} else {
+						shootHere = new pair(x, checkAt);
+						Controller.tempShotPairs.add(shootHere);
+						fields[x][checkAt].setGraphic(new ImageView(shoot_vertical));
+						checkAt++;
+					}
+				}
+				if (!shootingAnnulled) {
+					fields[x][--checkAt].setGraphic(new ImageView(shoot_down_hit));
+				}
+			} else if (direction.equals("right")) {
+				checkAt = x + 1;
+				if (Generel.board[y].charAt(checkAt) != 'w') {
+					shootHere = new pair(checkAt, y);
+					Controller.tempShotPairs.add(shootHere);
+					fields[checkAt][y].setGraphic(new ImageView(shoot_right));
+					checkAt++;
+				} else {
+					hitWall = true;
+					shootingAnnulled = true;
+				}
+				while (!hitWall && checkAt <= 19) {
+					if (Generel.board[y].charAt(checkAt) == 'w') {
+						hitWall = true;
+					} else {
+						shootHere = new pair(checkAt, y);
+						Controller.tempShotPairs.add(shootHere);
+						fields[checkAt][y].setGraphic(new ImageView(shoot_horizontal));
+						checkAt++;
+					}
+				}
+				if (!shootingAnnulled) {
+					fields[--checkAt][y].setGraphic(new ImageView(shoot_right_hit));
+				}
+			} else if (direction.equals("left")) {
+				checkAt = x - 1;
+				if (Generel.board[y].charAt(checkAt) != 'w') {
+					shootHere = new pair(checkAt, y);
+					Controller.tempShotPairs.add(shootHere);
+					fields[checkAt][y].setGraphic(new ImageView(shoot_left));
+					checkAt--;
+				} else {
+					hitWall = true;
+					shootingAnnulled = true;
+				}
+				while (!hitWall && checkAt >= 1) {
+					if (Generel.board[y].charAt(checkAt) == 'w') {
+						hitWall = true;
+					} else {
+						shootHere = new pair(checkAt, y);
+						Controller.tempShotPairs.add(shootHere);
+						fields[checkAt][y].setGraphic(new ImageView(shoot_horizontal));
+						checkAt--;
+					}
+				}
+				if (!shootingAnnulled) {
+					fields[++checkAt][y].setGraphic(new ImageView(shoot_left_hit));
+				}
+			}
+		});
+	}
+
+	public static void playerShoot() {
+		try {
+			int playerId = Controller.getPlayerId();
+			Controller.requestPlayerShoot(playerId);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/*

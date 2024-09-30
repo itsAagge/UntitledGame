@@ -37,7 +37,7 @@ public class ServerThreadIn extends Thread{
 			pair playerPos = new pair(player.getXpos(), player.getYpos());
 			System.out.println("Adding player to x: " + player.getXpos() + ", y: " + player.getYpos());
 			//Server.sendUpdateToClients(GameLogic.createPlayerAddedJSON(playerPos, player.getDirection())); // Send update
-			Server.sendUpdateToClients(GameLogic.createGamestateJSON()); // Send gamestate
+			Server.sendUpdateToClients(GameLogic.createGamestateJSON(-1)); // Send gamestate
 
 			while (true) {
 				String JSONRequest = inFromClient.readLine();
@@ -56,6 +56,11 @@ public class ServerThreadIn extends Thread{
 
 							System.out.println("Player " + id + " wants to move " + deltaX + " to horizontal and " + deltaY + " vertical, facing " + direction);
 							GameLogic.updatePlayer(id, deltaX, deltaY, direction);
+						}
+						case ("PlayerShoot") -> {
+							int id = jsonObject.getInt("PlayerId");
+							System.out.println("Player " + id + " wants to shoot");
+							GameLogic.shoot(id);
 						}
 					}
 
