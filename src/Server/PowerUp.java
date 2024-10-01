@@ -12,15 +12,19 @@ public class PowerUp {
         this.location = location;
     }
 
-    public static PowerUp randomPowerUp (){
-        double randomNumber = Math.floor((Math.random() * 10) + 1);
+    public static PowerUp randomPowerUp() {
+        double randomNumber = Math.floor((Math.random() * 5) + 1);
         pair pa = getRandomFreePosition();
         if (randomNumber == 1) {
             return new PowerUp("Plus 10 points", pa);
-        } else if (randomNumber == 2){
+        } else if (randomNumber == 2) {
             return new PowerUp("Teleport random", pa);
         } else if (randomNumber == 3) {
-            return new PowerUp("Andrew går ned på alle 4", pa);
+            return new PowerUp("Reverse controls", pa);
+        } else if (randomNumber == 4) {
+            return new PowerUp("Double speed", pa);
+        } else if (randomNumber == 5) {
+            return new PowerUp("Ass shooting", pa);
         } else {
             return null;
         }
@@ -33,10 +37,12 @@ public class PowerUp {
     public pair getLocation() {
         return location;
     }
-    public int getXpos () {
+
+    public int getXpos() {
         return location.getX();
     }
-    public int getYpos () {
+
+    public int getYpos() {
         return location.getY();
     }
 
