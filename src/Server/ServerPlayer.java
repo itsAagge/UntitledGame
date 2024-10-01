@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class ServerPlayer {
     String name;
     pair location;
-    int point;
+    int points;
     String direction;
     static int players = 0;
     int id;
@@ -16,7 +16,7 @@ public class ServerPlayer {
         this.name = name;
         this.location = loc;
         this.direction = direction;
-        this.point = 0;
+        this.points = 0;
         this.id = ++players;
     };
 
@@ -47,7 +47,15 @@ public class ServerPlayer {
         this.direction = direction;
     }
     public void addPoints(int p) {
-        point+=p;
+        points +=p;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPoints() {
+        return points;
     }
 
     public int getId() {
@@ -71,6 +79,6 @@ public class ServerPlayer {
     }
 
     public String toString() {
-        return name+":   "+point;
+        return name+":   "+ points;
     }
 }

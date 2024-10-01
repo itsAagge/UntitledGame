@@ -234,7 +234,7 @@ public class GameLogic {
         jsonObject.put("UpdateType", "Gamestate");
 
         //JSON Array for the players
-        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonPlayerArray = new JSONArray();
         for (ServerPlayer player : players.values()) {
             JSONObject jsonPlayer = new JSONObject();
             jsonPlayer.put("PlayerXPos", player.getXpos());
@@ -242,9 +242,19 @@ public class GameLogic {
             jsonPlayer.put("PlayerDirection", player.getDirection());
             boolean isShooting = player.getId() == shooterId;
             jsonPlayer.put("PlayerShooting", isShooting);
-            jsonArray.put(jsonPlayer);
+            jsonPlayerArray.put(jsonPlayer);
         }
-        jsonObject.put("PlayerArray", jsonArray);
+        jsonObject.put("PlayerArray", jsonPlayerArray);
+
+        //JSON Array for the points
+        JSONArray jsonPointArray = new JSONArray();
+        for (ServerPlayer player : players.values()) {
+            JSONObject jsonPoint = new JSONObject();
+            jsonPoint.put("PlayerName", player.getName());
+            jsonPoint.put("PlayerPoints", player.getPoints());
+            jsonPointArray.put(jsonPoint);
+        }
+        jsonObject.put("PointArray", jsonPointArray);
 
         return jsonObject;
     }

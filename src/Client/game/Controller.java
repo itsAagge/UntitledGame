@@ -14,6 +14,7 @@ public class Controller {
     private static ClientThreadIn threadInFromServer;
     private static int playerId;
     private static ArrayList<pair> playersOnScreen = new ArrayList<>();
+    private static ArrayList<String> playerPoints = new ArrayList<>();
     public static ArrayList<pair> tempShotPairs = new ArrayList<>();
 
     public static void startController(Socket clientSocket) throws Exception {
@@ -35,6 +36,7 @@ public class Controller {
         System.out.println(gamestate);
         JSONObject jsonObject = new JSONObject(gamestate);
 
+        playerPoints.clear();
         Gui.removeAllShots();
         pair shooterPair = null;
         String shooterDirection = "";
@@ -42,9 +44,9 @@ public class Controller {
             Gui.removePlayerOnScreen(pair);
         }
         playersOnScreen.clear();
-        JSONArray jsonArray = jsonObject.getJSONArray("PlayerArray");
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonPlayer = jsonArray.getJSONObject(i);
+        JSONArray jsonPlayerArray = jsonObject.getJSONArray("PlayerArray");
+        for (int i = 0; i < jsonPlayerArray.length(); i++) {
+            JSONObject jsonPlayer = jsonPlayerArray.getJSONObject(i);
             pair pos = new pair(0, 0);
             pos.x = jsonPlayer.getInt("PlayerXPos");
             pos.y = jsonPlayer.getInt("PlayerYPos");
@@ -53,10 +55,17 @@ public class Controller {
                 shooterPair = pos;
                 shooterDirection = direction;
             }
-
             playersOnScreen.add(pos);
             Gui.placePlayerOnScreen(pos, direction);
         }
+        JSONArray jsonPointArray = jsonObject.getJSONArray("PointArray");
+        for (int i = 0; i < jsonPointArray.length(); i++) {
+            JSONObject jsonPoint = jsonPointArray.getJSONObject(i);
+            String playerName = jsonPoint.getString("PlayerName");
+            int playerPoint = jsonPoint.getInt("PlayerPoints");
+            playerPoints.add(playerName + ": " + playerPoint + " points");
+        }
+        Gui.updateScoreTable();
         if (shooterPair != null) {
             Gui.shoot(shooterPair, shooterDirection);
         }
@@ -98,5 +107,9 @@ public class Controller {
 
     public static int getPlayerId() {
         return Controller.playerId;
+    }
+
+    public static ArrayList<String> getPlayerPoints() {
+        return new ArrayList<>(playerPoints);
     }
 }
