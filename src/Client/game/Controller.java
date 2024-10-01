@@ -25,6 +25,7 @@ public class Controller {
         // For input from the server
         createThreadForIncomingInformation();
     }
+
     public static void createThreadForIncomingInformation() throws Exception {
         threadInFromServer = new ClientThreadIn(clientSocket);
         threadInFromServer.start();
@@ -33,56 +34,31 @@ public class Controller {
     public static void updateGamestate(String gamestate) {
         System.out.println(gamestate);
         JSONObject jsonObject = new JSONObject(gamestate);
-        String updateType = jsonObject.getString("UpdateType");
-        switch (updateType) {
-            case ("PlayerAdded") -> { // Send update -- overvej at slette
-                System.out.println("Player added");
-                pair pos = new pair(0,0);
-                pos.x = jsonObject.getInt("PlayerXPos");
-                pos.y = jsonObject.getInt("PlayerYPos");
-                String direction = jsonObject.getString("PlayerDirection");
 
-                System.out.println("Adding player to x: " + pos.x + ", y: " + pos.y);
-                Gui.placePlayerOnScreen(pos, direction);
+        Gui.removeAllShots();
+        pair shooterPair = null;
+        String shooterDirection = "";
+        for (pair pair : playersOnScreen) {
+            Gui.removePlayerOnScreen(pair);
+        }
+        playersOnScreen.clear();
+        JSONArray jsonArray = jsonObject.getJSONArray("PlayerArray");
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonPlayer = jsonArray.getJSONObject(i);
+            pair pos = new pair(0, 0);
+            pos.x = jsonPlayer.getInt("PlayerXPos");
+            pos.y = jsonPlayer.getInt("PlayerYPos");
+            String direction = jsonPlayer.getString("PlayerDirection");
+            if (jsonPlayer.getBoolean("PlayerShooting")) {
+                shooterPair = pos;
+                shooterDirection = direction;
             }
-            case ("PlayerMoved") -> { // Send update -- overvej at slette
-                pair oldpos = new pair(0,0);
-                oldpos.x = jsonObject.getInt("PlayerOldXPos");
-                oldpos.y = jsonObject.getInt("PlayerOldYPos");
-                pair newpos = new pair(0,0);
-                newpos.x = jsonObject.getInt("PlayerNewXPos");
-                newpos.y = jsonObject.getInt("PlayerNewYPos");
-                String direction = jsonObject.getString("PlayerDirection");
 
-                Gui.movePlayerOnScreen(oldpos, newpos, direction);
-            }
-            case ("Gamestate") -> { // Send gamestate
-                Gui.removeAllShots();
-                pair shooterPair = null;
-                String shooterDirection = "";
-                for (pair pair : playersOnScreen) {
-                    Gui.removePlayerOnScreen(pair);
-                }
-                playersOnScreen.clear();
-                JSONArray jsonArray = jsonObject.getJSONArray("PlayerArray");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonPlayer = jsonArray.getJSONObject(i);
-                    pair pos = new pair(0,0);
-                    pos.x = jsonPlayer.getInt("PlayerXPos");
-                    pos.y = jsonPlayer.getInt("PlayerYPos");
-                    String direction = jsonPlayer.getString("PlayerDirection");
-                    if (jsonPlayer.getBoolean("PlayerShooting")) {
-                        shooterPair = pos;
-                        shooterDirection = direction;
-                    }
-
-                    playersOnScreen.add(pos);
-                    Gui.placePlayerOnScreen(pos, direction);
-                }
-                if (shooterPair != null) {
-                    Gui.shoot(shooterPair, shooterDirection);
-                }
-            }
+            playersOnScreen.add(pos);
+            Gui.placePlayerOnScreen(pos, direction);
+        }
+        if (shooterPair != null) {
+            Gui.shoot(shooterPair, shooterDirection);
         }
     }
 

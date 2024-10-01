@@ -36,8 +36,7 @@ public class ServerThreadIn extends Thread{
 			//Adds the new player to everyone's gui
 			pair playerPos = new pair(player.getXpos(), player.getYpos());
 			System.out.println("Adding player to x: " + player.getXpos() + ", y: " + player.getYpos());
-			//Server.sendUpdateToClients(GameLogic.createPlayerAddedJSON(playerPos, player.getDirection())); // Send update
-			Server.sendUpdateToClients(GameLogic.createGamestateJSON(-1)); // Send gamestate
+			Server.sendUpdateToClients(GameLogic.createGamestateJSON(-1));
 
 			while (true) {
 				String JSONRequest = inFromClient.readLine();

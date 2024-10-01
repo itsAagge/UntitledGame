@@ -7,7 +7,6 @@
     <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Changed updatetype to send the entire gamestate every time instead of just the update">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/GameLogic.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +43,7 @@
     "Application.Server.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Kongen",
+    "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/augus/Documents/JSON/json-20140107.jar",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
@@ -59,17 +58,7 @@
     <MESSAGE value="JSON added and player storage in GameLogic changed to HashMap&lt;Integer (the player id), Player (the player)&gt; for ease of search" />
     <MESSAGE value="Network works yo" />
     <MESSAGE value="Changed updatetype to send the entire gamestate every time instead of just the update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed updatetype to send the entire gamestate every time instead of just the update" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Server/ServerThreadIn.java</url>
-          <line>42</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Shooting has been implemented" />
+    <option name="LAST_COMMIT_MESSAGE" value="Shooting has been implemented" />
   </component>
 </project>

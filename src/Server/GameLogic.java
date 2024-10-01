@@ -70,8 +70,7 @@ public class GameLogic {
                 p.setLocation(pa);
                 pair oldpos = new pair(x+delta_x,y+delta_y);
 
-                //Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, pa, direction)); // Send update
-                Server.sendUpdateToClients(createGamestateJSON(-1)); // Send gamestate
+                Server.sendUpdateToClients(createGamestateJSON(-1));
             } else if (pUp != null) {
                 if (pUp.getName().equals("Plus 10 points")) {
                     player.addPoints(10);
@@ -88,8 +87,7 @@ public class GameLogic {
                 pair newpos = new pair(x + delta_x, y + delta_y);
                 player.setLocation(newpos);
 
-                //Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, newpos, direction)); // Send update
-                Server.sendUpdateToClients(createGamestateJSON(-1)); // Send gamestate
+                Server.sendUpdateToClients(createGamestateJSON(-1));
             }
         }
     }
@@ -190,33 +188,7 @@ public class GameLogic {
         return null;
     }
 
-    /*
-    public static JSONObject createPlayerMoveJSON(pair oldpos, pair newpos, String direction) { // Send update
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("MessageType", "Update");
-        jsonObject.put("UpdateType", "PlayerMoved");
-        jsonObject.put("PlayerOldXPos", oldpos.x);
-        jsonObject.put("PlayerOldYPos", oldpos.y);
-        jsonObject.put("PlayerNewXPos", newpos.x);
-        jsonObject.put("PlayerNewYPos", newpos.y);
-        jsonObject.put("PlayerDirection", direction);
-
-        return jsonObject;
-    }
-
-    public static JSONObject createPlayerAddedJSON(pair pos, String direction) { // Send update
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("MessageType", "Update");
-        jsonObject.put("UpdateType", "PlayerAdded");
-        jsonObject.put("PlayerXPos", pos.x);
-        jsonObject.put("PlayerYPos", pos.y);
-        jsonObject.put("PlayerDirection", direction);
-
-        return jsonObject;
-    }
-     */
-
-    public static JSONObject createGamestateJSON(int shooterId) { // Send gamestate
+    public static JSONObject createGamestateJSON(int shooterId) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("MessageType", "Update");
         jsonObject.put("UpdateType", "Gamestate");
