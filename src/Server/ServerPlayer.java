@@ -1,5 +1,7 @@
 package Server;
 
+import java.time.LocalDateTime;
+
 public class ServerPlayer {
     String name;
     pair location;
@@ -7,6 +9,8 @@ public class ServerPlayer {
     String direction;
     static int players = 0;
     int id;
+    LocalDateTime powerUpTime;
+    String powerUpType;
 
     public ServerPlayer(String name, pair loc, String direction) {
         this.name = name;
@@ -48,6 +52,22 @@ public class ServerPlayer {
 
     public int getId() {
         return id;
+    }
+
+    public LocalDateTime getPowerUpTime() {
+        return powerUpTime;
+    }
+
+    public void setPowerUpTime(LocalDateTime powerUpTime) {
+        this.powerUpTime = powerUpTime;
+    }
+
+    public String getPowerUpType() {
+        return powerUpType;
+    }
+
+    public void setPowerUpType(String powerUpType) {
+        this.powerUpType = powerUpType;
     }
 
     public String toString() {

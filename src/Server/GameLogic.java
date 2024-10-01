@@ -3,6 +3,7 @@ package Server;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class GameLogic {
@@ -13,7 +14,7 @@ public class GameLogic {
     public synchronized static ServerPlayer addPlayer(String name) {
         pair p = getRandomFreePosition();
         System.out.println("Position to add = x: " + p.x + ", y: " + p.y);
-        ServerPlayer player = new ServerPlayer(name,p,"up");
+        ServerPlayer player = new ServerPlayer(name, p, "up");
         players.put(player.getId(), player);
         return player;
     }
@@ -25,18 +26,18 @@ public class GameLogic {
         int x = 1;
         int y = 1;
         boolean foundfreepos = false;
-        while  (!foundfreepos) {
+        while (!foundfreepos) {
             Random r = new Random();
-            x = Math.abs(r.nextInt()%18) +1;
-            y = Math.abs(r.nextInt()%18) +1;
-            if (Generel.board[y].charAt(x)==' ') // er det gulv ?
+            x = Math.abs(r.nextInt() % 18) + 1;
+            y = Math.abs(r.nextInt() % 18) + 1;
+            if (Generel.board[y].charAt(x) == ' ') // er det gulv ?
             {
                 foundfreepos = true;
-                for (ServerPlayer p: players.values()) {
-                    if (p.getXpos()==x && p.getYpos()==y) //pladsen optaget af en anden
+                for (ServerPlayer p : players.values()) {
+                    if (p.getXpos() == x && p.getYpos() == y) //pladsen optaget af en anden
                         foundfreepos = false;
                 }
-                for (PowerUp p: powerUpList) {
+                for (PowerUp p : powerUpList) {
                     if (p.getXpos() == x && p.getYpos() == y) {
                         foundfreepos = false;
                     }
@@ -44,7 +45,7 @@ public class GameLogic {
 
             }
         }
-        pair p = new pair(x,y);
+        pair p = new pair(x, y);
         return p;
     }
 
@@ -53,22 +54,31 @@ public class GameLogic {
         if (player == null) throw new IllegalArgumentException("Player doesn't exist");
 
         player.direction = direction;
-        int x = player.getXpos(),y = player.getYpos();
-
-        if (Generel.board[y+delta_y].charAt(x+delta_x)=='w') {
-            //player.addPoints(-1);
+        if (player.getPowerUpTime().isAfter(LocalDateTime.now())) {
+            if (player.getPowerUpType().equals("Reverse controls")) {
+                player.direction = reverseDirection(direction);
+                delta_x = reverseDelta(delta_x);
+                delta_y = reverseDelta(delta_y);
+            } else if (player.getPowerUpType().equals("Double speed")) {
+             delta_x = delta_x * 2;
+             delta_y = delta_y * 2;
+            }
         }
-        else {
+        int x = player.getXpos(), y = player.getYpos();
+
+        if (Generel.board[y + delta_y].charAt(x + delta_x) == 'w') {
+            //player.addPoints(-1);
+        } else {
             // collision detection
-            ServerPlayer p = getPlayerAt(x+delta_x,y+delta_y);
-            PowerUp pUp = getPowerUpAt(x+delta_x, y+delta_y);
-            if (p!=null) {
+            ServerPlayer p = getPlayerAt(x + delta_x, y + delta_y);
+            PowerUp pUp = getPowerUpAt(x + delta_x, y + delta_y);
+            if (p != null) {
                 player.addPoints(14);
                 //update the other player
                 p.addPoints(-7);
                 pair pa = getRandomFreePosition();
                 p.setLocation(pa);
-                pair oldpos = new pair(x+delta_x,y+delta_y);
+                pair oldpos = new pair(x + delta_x, y + delta_y);
 
                 //Server.sendUpdateToClients(createPlayerMoveJSON(oldpos, pa, direction)); // Send update
                 Server.sendUpdateToClients(createGamestateJSON(-1)); // Send gamestate
@@ -78,9 +88,15 @@ public class GameLogic {
                 } else if (pUp.getName().equals("Teleport random")) {
                     pair pa = getRandomFreePosition();
                     player.setLocation(pa);
-                } else if (pUp.getName().equals("Andrew går ned på alle 4")) {
-
-                    player.addPoints(10000);
+                } else if (pUp.getName().equals("Reverse controls")) {
+                    player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
+                    player.setPowerUpType("Reverse controls");
+                } else if (pUp.getName().equals("Double speed")) {
+                    player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
+                    player.setPowerUpType("Double speed");
+                } else if (pUp.getName().equals("Ass shooting")) {
+                    player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
+                    player.setPowerUpType("Ass shooting");
                 }
             } else {
                 //player.addPoints(1);
@@ -172,9 +188,33 @@ public class GameLogic {
         System.out.println("Done");
     }
 
+    public static int reverseDelta(int delta) {
+        int newDelta = 0;
+        if (delta == 1) {
+            newDelta = -1;
+        } else if (delta == -1) {
+            newDelta = 1;
+        }
+        return delta;
+    }
+
+    public static String reverseDirection(String direction) {
+        String newDirection = "";
+        if (direction.equals("up")) {
+            newDirection = "down";
+        } else if (direction.equals("down")) {
+            newDirection = "up";
+        } else if (direction.equals("left")) {
+            newDirection = ("right");
+        } else if (direction.equals("right")) {
+            newDirection = "left";
+        }
+        return newDirection;
+    }
+
     public static ServerPlayer getPlayerAt(int x, int y) {
         for (ServerPlayer p : players.values()) {
-            if (p.getXpos()==x && p.getYpos()==y) {
+            if (p.getXpos() == x && p.getYpos() == y) {
                 return p;
             }
         }
