@@ -3,6 +3,7 @@ package Client.game;
 import java.util.*;
 import java.util.List;
 
+import Server.GameLogic;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -29,7 +30,7 @@ public class Gui extends Application {
 
 
 	private static Label[][] fields;
-	private TextArea scoreList;
+	private static TextArea scoreList;
 	
 
 
@@ -295,23 +296,21 @@ public class Gui extends Application {
 		}
 	}
 
-	/*
-
-	public void updateScoreTable()
+	public static void updateScoreTable()
 	{
 		Platform.runLater(() -> {
-			scoreList.setText(getScoreList());
+			ArrayList<String> playerPoints = Controller.getPlayerPoints();
+			StringBuilder sb = new StringBuilder();
+			sb.append("Players and points\n\n");
+			for (int i = 0; i < playerPoints.size(); i++) {
+				sb.append(playerPoints.get(i));
+				if (i < playerPoints.size() - 1) {
+					sb.append("\n");
+				}
+			}
+			scoreList.setText(sb.toString());
 			});
 	}
-
-	public String getScoreList() {
-		StringBuffer b = new StringBuffer(100);
-		for (Player p : GameLogic.players) {
-			b.append(p+"\r\n");
-		}
-		return b.toString();
-	}
-	 */
 
 
 
