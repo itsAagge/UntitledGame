@@ -128,7 +128,7 @@ public class GameLogic {
         }
 
         int checkAt = 0;
-        ServerPlayer playerHit = null;
+        ArrayList<ServerPlayer> playersHitArrayList = new ArrayList<ServerPlayer>();
 
         if (direction.equals("up") || starShootingActive) {
             boolean hitWallOrPlayer = false;
@@ -136,7 +136,7 @@ public class GameLogic {
             while (!hitWallOrPlayer && checkAt >= 1) {
                 if (getPlayerAt(x, checkAt) != null) {
                     hitWallOrPlayer = true;
-                    playerHit = getPlayerAt(x, checkAt);
+                    playersHitArrayList.add(getPlayerAt(x, checkAt));
                 } else if (Generel.board[checkAt].charAt(x) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
@@ -150,7 +150,7 @@ public class GameLogic {
             while (!hitWallOrPlayer && checkAt <= 19) {
                 if (getPlayerAt(x, checkAt) != null) {
                     hitWallOrPlayer = true;
-                    playerHit = getPlayerAt(x, checkAt);
+                    playersHitArrayList.add(getPlayerAt(x, checkAt));
                 } else if (Generel.board[checkAt].charAt(x) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
@@ -164,7 +164,7 @@ public class GameLogic {
             while (!hitWallOrPlayer && checkAt <= 19) {
                 if (getPlayerAt(checkAt, y) != null) {
                     hitWallOrPlayer = true;
-                    playerHit = getPlayerAt(checkAt, y);
+                    playersHitArrayList.add(getPlayerAt(checkAt, y));
                 } else if (Generel.board[x].charAt(checkAt) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
@@ -178,7 +178,7 @@ public class GameLogic {
             while (!hitWallOrPlayer && checkAt >= 1) {
                 if (getPlayerAt(checkAt, y) != null) {
                     hitWallOrPlayer = true;
-                    playerHit = getPlayerAt(checkAt, y);
+                    playersHitArrayList.add(getPlayerAt(checkAt, y));
                 } else if (Generel.board[x].charAt(checkAt) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
@@ -186,12 +186,14 @@ public class GameLogic {
                 }
             }
         }
-        if (playerHit != null) {
+        if (!playersHitArrayList.isEmpty()) {
             player.addPoints(10);
-            playerHit.addPoints(-5);
+            for (ServerPlayer playerHit : playersHitArrayList) {
+                playerHit.addPoints(-5);
 
-            pair pa = getRandomFreePosition();
-            playerHit.setLocation(pa);
+                pair pa = getRandomFreePosition();
+                playerHit.setLocation(pa);
+            }
         }
         Server.sendUpdateToClients(createGamestateJSON(id, starShootingActive));
         System.out.println("Shooting");
