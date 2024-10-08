@@ -18,6 +18,8 @@ public class ServerPlayer {
         this.direction = direction;
         this.points = 0;
         this.id = ++players;
+        this.powerUpTime = LocalDateTime.MIN;
+        this.powerUpType = "";
     };
 
     public pair getLocation() {
