@@ -120,10 +120,10 @@ public class GameLogic {
         }
 
         int checkAt = 0;
-        boolean hitWallOrPlayer = false;
         ServerPlayer playerHit = null;
 
         if (direction.equals("up") || starShootingActive) {
+            boolean hitWallOrPlayer = false;
             checkAt = y - 1;
             while (!hitWallOrPlayer && checkAt >= 1) {
                 if (getPlayerAt(x, checkAt) != null) {
@@ -137,6 +137,7 @@ public class GameLogic {
             }
         }
         if (direction.equals("down") || starShootingActive) {
+            boolean hitWallOrPlayer = false;
             checkAt = y + 1;
             while (!hitWallOrPlayer && checkAt <= 19) {
                 if (getPlayerAt(x, checkAt) != null) {
@@ -150,6 +151,7 @@ public class GameLogic {
             }
         }
         if (direction.equals("right") || starShootingActive) {
+            boolean hitWallOrPlayer = false;
             checkAt = x + 1;
             while (!hitWallOrPlayer && checkAt <= 19) {
                 if (getPlayerAt(checkAt, y) != null) {
@@ -163,6 +165,7 @@ public class GameLogic {
             }
         }
         if (direction.equals("left") || starShootingActive) {
+            boolean hitWallOrPlayer = false;
             checkAt = x - 1;
             while (!hitWallOrPlayer && checkAt >= 1) {
                 if (getPlayerAt(checkAt, y) != null) {

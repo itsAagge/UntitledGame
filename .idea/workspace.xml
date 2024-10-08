@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Join fix">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client/game/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client/game/Gui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Gui.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/GameLogic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/ServerPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ServerPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/ServerThreadIn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ServerThreadIn.java" afterDir="false" />
-    </list>
+    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Movement fix" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,6 +58,8 @@
     <MESSAGE value="PowerUp startmetoder" />
     <MESSAGE value="LocalDateTime fix" />
     <MESSAGE value="Join fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Join fix" />
+    <MESSAGE value="Star shooting implemented" />
+    <MESSAGE value="Movement fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Movement fix" />
   </component>
 </project>
