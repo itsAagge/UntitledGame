@@ -15,7 +15,15 @@ public class GameLogic {
         System.out.println("Position to add = x: " + p.x + ", y: " + p.y);
         ServerPlayer player = new ServerPlayer(name, p, "up");
         players.put(player.getId(), player);
+        addPowerUp();
         return player;
+    }
+
+    public static void addPowerUp () {
+        pair p = getRandomFreePosition();
+        PowerUp powerUp = PowerUp.randomPowerUp();
+        powerUp.setLocation(p);
+        powerUpList.add(powerUp);
     }
 
     public static pair getRandomFreePosition()
@@ -263,6 +271,15 @@ public class GameLogic {
             jsonPointArray.put(jsonPoint);
         }
         jsonObject.put("PointArray", jsonPointArray);
+
+        JSONArray jsonPowerUpArray = new JSONArray();
+        for (PowerUp powerUp : powerUpList) {
+            JSONObject JsonPowerUp = new JSONObject();
+            JsonPowerUp.put("X", powerUp.getXpos());
+            JsonPowerUp.put("Y", powerUp.getYpos());
+            jsonPowerUpArray.put(JsonPowerUp);
+        }
+        jsonObject.put("PowerUpArray", jsonPowerUpArray);
 
         return jsonObject;
     }

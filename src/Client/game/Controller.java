@@ -72,6 +72,17 @@ public class Controller {
         if (shooterPair != null) {
             Gui.shoot(shooterPair, shooterDirection, starShootingActive);
         }
+        Gui.removeAllPowerUps();
+        powerUp.clear();
+        JSONArray JsonPowerUpArray = jsonObject.getJSONArray("PowerUpArray");
+        for (int i = 0; i < JsonPowerUpArray.length(); i++) {
+            JSONObject jsonPU = JsonPowerUpArray.getJSONObject(i);
+            int x = jsonPU.getInt("X");
+            int y = jsonPU.getInt("Y");
+            pair p = new pair(x, y);
+            powerUp.add(p);
+            Gui.placePowerUp(p);
+        }
     }
 
     public static void requestPlayerAddToGame(String name) throws Exception {
