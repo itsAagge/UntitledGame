@@ -211,7 +211,7 @@ public class GameLogic {
         } else if (delta == -1) {
             newDelta = 1;
         }
-        return delta;
+        return newDelta;
     }
 
     public static String reverseDirection(String direction) {
