@@ -16,6 +16,7 @@ public class Controller {
     private static ArrayList<pair> playersOnScreen = new ArrayList<>();
     private static ArrayList<String> playerPoints = new ArrayList<>();
     public static ArrayList<pair> tempShotPairs = new ArrayList<>();
+    public static ArrayList<pair> powerUp = new ArrayList<>();
 
     public static void startController(Socket clientSocket) throws Exception {
         Controller.clientSocket = clientSocket;
