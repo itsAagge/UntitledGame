@@ -10,6 +10,7 @@ public class GameLogic {
     public static HashMap<Integer, ServerPlayer> players = new HashMap<>();
     public static PowerUp powerUpInGame;
     public static boolean powerUpAdded = false;
+    public static boolean powerUpActive = false;
 
     public synchronized static ServerPlayer addPlayer(String name) {
         pair p = getRandomFreePosition();
@@ -27,6 +28,7 @@ public class GameLogic {
         pair p = getRandomFreePosition();
         PowerUp powerUp = PowerUp.randomPowerUp();
         powerUp.setLocation(p);
+        powerUpActive = true;
         powerUpInGame = powerUp;
     }
 
@@ -89,7 +91,7 @@ public class GameLogic {
                 pair newpos = new pair(x + delta_x, y + delta_y);
                 player.setLocation(newpos);
                 Server.sendUpdateToClients(createGamestateJSON(-1, false));
-            } else if (pUp != null) {
+            } else if (pUp != null && powerUpActive) {
                 if (pUp.getName().equals("Plus 10 points")) {
                     player.addPoints(10);
                     System.out.println("10 point picked up");
@@ -110,7 +112,9 @@ public class GameLogic {
                     player.setPowerUpType("Star shooting");
                     System.out.println("Star shooting picked up");
                 }
-                newPowerUp();
+                AddNewPowerUpThread t1 = new AddNewPowerUpThread();
+                t1.start();
+                powerUpActive = false;
                 if (!pUp.getName().equals("Teleport random")) {
                     pair newpos = new pair(x + delta_x, y + delta_y);
                     player.setLocation(newpos);
@@ -285,9 +289,14 @@ public class GameLogic {
         jsonObject.put("PointArray", jsonPointArray);
 
         JSONObject JsonPowerUp = new JSONObject();
-        JsonPowerUp.put("X", powerUpInGame.getXpos());
-        JsonPowerUp.put("Y", powerUpInGame.getYpos());
-        jsonObject.put("PowerUpPosition", JsonPowerUp);
+        JsonPowerUp.put("Active", powerUpActive);
+        if (powerUpActive) {
+            JSONObject JsonPowerUpPos = new JSONObject();
+            JsonPowerUpPos.put("X", powerUpInGame.getXpos());
+            JsonPowerUpPos.put("Y", powerUpInGame.getYpos());
+            JsonPowerUp.put("PowerUpPosition", JsonPowerUpPos);
+        }
+        jsonObject.put("PowerUp", JsonPowerUp);
 
         return jsonObject;
     }
