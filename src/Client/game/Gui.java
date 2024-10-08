@@ -27,6 +27,7 @@ public class Gui extends Application {
 	public static Image hero_right,hero_left,hero_up,hero_down;
 	public static Image shoot_up,shoot_down,shoot_right,shoot_left,shoot_vertical,shoot_horizontal;
 	public static Image shoot_up_hit,shoot_down_hit,shoot_right_hit,shoot_left_hit;
+	public static Image random_PowerUp;
 
 
 	private static Label[][] fields;
@@ -81,6 +82,7 @@ public class Gui extends Application {
 			shoot_down_hit    = new Image(getClass().getResourceAsStream("Image/fireWallSouth.png"),size,size,false,false);
 			shoot_right_hit   = new Image(getClass().getResourceAsStream("Image/fireWallEast.png"),size,size,false,false);
 			shoot_left_hit    = new Image(getClass().getResourceAsStream("Image/fireWallWest.png"),size,size,false,false);
+			random_PowerUp 	  = new Image(getClass().getResourceAsStream("Image/PowerUpFloor.png"),size, size, false, false);
 
 			fields = new Label[20][20];
 			for (int j=0; j<20; j++) {
@@ -148,6 +150,22 @@ public class Gui extends Application {
 				fields[newx][newy].setGraphic(new ImageView(hero_down));
 			};
 			});
+	}
+
+	public static void placePowerUp(pair newpos) {
+		Platform.runLater(() -> {
+			int newx = newpos.getX();
+			int newy = newpos.getY();
+			fields[newx][newy].setGraphic(new ImageView(random_PowerUp));
+		});
+	}
+
+	public static void removeAllPowerUps() {
+		Platform.runLater(() -> {
+			for (pair pu: Controller.powerUp) {
+				fields[pu.x][pu.y].setGraphic(new ImageView(image_floor));
+			}
+		});
 	}
 	
 	public static void movePlayerOnScreen(pair oldpos, pair newpos, String direction)

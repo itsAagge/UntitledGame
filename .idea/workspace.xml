@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="LocalDateTime fix" />
+    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="LocalDateTime fix">
+      <change afterPath="$PROJECT_DIR$/src/Client/game/Image/PowerUpfloor.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UntitledGame.iml" beforeDir="false" afterPath="$PROJECT_DIR$/UntitledGame.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/game/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/game/Gui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Gui.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,7 +27,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -40,13 +47,18 @@
     "Application.Server.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/augus/Documents/JSON/json-20140107.jar",
+    "git-widget-placeholder": "dev2",
+    "last_opened_file_path": "C:/Users/andre/IdeaProjects/UntitledGame/src/Client/game/Image",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\andre\IdeaProjects\UntitledGame\src\Client\game\Image" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
@@ -58,16 +70,5 @@
     <MESSAGE value="PowerUp startmetoder" />
     <MESSAGE value="LocalDateTime fix" />
     <option name="LAST_COMMIT_MESSAGE" value="LocalDateTime fix" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Server/ServerThreadIn.java</url>
-          <line>42</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
