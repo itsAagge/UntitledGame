@@ -77,8 +77,8 @@ public class GameLogic {
                 p.addPoints(-7);
                 pair pa = getRandomFreePosition();
                 p.setLocation(pa);
-                pair oldpos = new pair(x + delta_x, y + delta_y);
-
+                pair newpos = new pair(x + delta_x, y + delta_y);
+                player.setLocation(newpos);
                 Server.sendUpdateToClients(createGamestateJSON(-1, false));
             } else if (pUp != null) {
                 if (pUp.getName().equals("Plus 10 points")) {
@@ -96,12 +96,12 @@ public class GameLogic {
                     player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
                     player.setPowerUpType("Star shooting");
                 }
-            } else {
-                //player.addPoints(1);
-                pair oldpos = player.getLocation();
                 pair newpos = new pair(x + delta_x, y + delta_y);
                 player.setLocation(newpos);
-
+                Server.sendUpdateToClients(createGamestateJSON(-1, false));
+            } else {
+                pair newpos = new pair(x + delta_x, y + delta_y);
+                player.setLocation(newpos);
                 Server.sendUpdateToClients(createGamestateJSON(-1, false));
             }
         }
