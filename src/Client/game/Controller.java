@@ -16,6 +16,7 @@ public class Controller {
     private static ArrayList<pair> playersOnScreen = new ArrayList<>();
     private static ArrayList<String> playerPoints = new ArrayList<>();
     public static ArrayList<pair> tempShotPairs = new ArrayList<>();
+    public static ArrayList<pair> powerUp = new ArrayList<>();
 
     public static void startController(Socket clientSocket) throws Exception {
         Controller.clientSocket = clientSocket;
@@ -70,6 +71,17 @@ public class Controller {
         Gui.updateScoreTable();
         if (shooterPair != null) {
             Gui.shoot(shooterPair, shooterDirection, starShootingActive);
+        }
+        Gui.removeAllPowerUps();
+        powerUp.clear();
+        JSONArray JsonPowerUpArray = jsonObject.getJSONArray("PowerUpArray");
+        for (int i = 0; i < JsonPowerUpArray.length(); i++) {
+            JSONObject jsonPU = JsonPowerUpArray.getJSONObject(i);
+            int x = jsonPU.getInt("X");
+            int y = jsonPU.getInt("Y");
+            pair p = new pair(x, y);
+            powerUp.add(p);
+            Gui.placePowerUp(p);
         }
     }
 
