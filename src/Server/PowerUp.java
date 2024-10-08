@@ -24,7 +24,7 @@ public class PowerUp {
         } else if (randomNumber == 4) {
             return new PowerUp("Double speed", pa);
         } else if (randomNumber == 5) {
-            return new PowerUp("Ass shooting", pa);
+            return new PowerUp("Star shooting", pa);
         } else {
             return null;
         }

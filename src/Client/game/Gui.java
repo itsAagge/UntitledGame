@@ -160,11 +160,10 @@ public class Gui extends Application {
 		});
 	}
 
-	public static void removeAllPowerUps() {
+	public static void removePowerUp(pair powerUp) {
 		Platform.runLater(() -> {
-			for (pair pu: Controller.powerUp) {
-				fields[pu.x][pu.y].setGraphic(new ImageView(image_floor));
-			}
+			System.out.println("Removing powerup at x: " + powerUp.x + ", y: " + powerUp.y);
+			fields[powerUp.getX()][powerUp.getY()].setGraphic(new ImageView(image_floor));
 		});
 	}
 	
@@ -182,7 +181,6 @@ public class Gui extends Application {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		//updateScoreTable();
 	}
 
 	public static void removeAllShots() {

@@ -8,22 +8,26 @@ import java.util.*;
 
 public class GameLogic {
     public static HashMap<Integer, ServerPlayer> players = new HashMap<>();
-    public static ArrayList<PowerUp> powerUpList = new ArrayList<>();
+    public static PowerUp powerUpInGame;
+    public static boolean powerUpAdded = false;
 
     public synchronized static ServerPlayer addPlayer(String name) {
         pair p = getRandomFreePosition();
         System.out.println("Position to add = x: " + p.x + ", y: " + p.y);
         ServerPlayer player = new ServerPlayer(name, p, "up");
         players.put(player.getId(), player);
-        addPowerUp();
+        if (!powerUpAdded) {
+            newPowerUp();
+            powerUpAdded = true;
+        }
         return player;
     }
 
-    public static void addPowerUp () {
+    public static void newPowerUp() {
         pair p = getRandomFreePosition();
         PowerUp powerUp = PowerUp.randomPowerUp();
         powerUp.setLocation(p);
-        powerUpList.add(powerUp);
+        powerUpInGame = powerUp;
     }
 
     public static pair getRandomFreePosition()
@@ -44,12 +48,9 @@ public class GameLogic {
                     if (p.getXpos() == x && p.getYpos() == y) //pladsen optaget af en anden
                         foundfreepos = false;
                 }
-                for (PowerUp p : powerUpList) {
-                    if (p.getXpos() == x && p.getYpos() == y) {
-                        foundfreepos = false;
-                    }
+                if (powerUpInGame != null && powerUpInGame.getXpos() == x && powerUpInGame.getYpos() == y) {
+                    foundfreepos = false;
                 }
-
             }
         }
         pair p = new pair(x, y);
@@ -91,21 +92,29 @@ public class GameLogic {
             } else if (pUp != null) {
                 if (pUp.getName().equals("Plus 10 points")) {
                     player.addPoints(10);
+                    System.out.println("10 point picked up");
                 } else if (pUp.getName().equals("Teleport random")) {
                     pair pa = getRandomFreePosition();
                     player.setLocation(pa);
+                    System.out.println("Teleport random picked up");
                 } else if (pUp.getName().equals("Reverse controls")) {
                     player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
                     player.setPowerUpType("Reverse controls");
+                    System.out.println("Reverse controls picked up");
                 } else if (pUp.getName().equals("Double speed")) {
                     player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
                     player.setPowerUpType("Double speed");
+                    System.out.println("Double speed picked up");
                 } else if (pUp.getName().equals("Star shooting")) {
                     player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
                     player.setPowerUpType("Star shooting");
+                    System.out.println("Star shooting picked up");
                 }
-                pair newpos = new pair(x + delta_x, y + delta_y);
-                player.setLocation(newpos);
+                newPowerUp();
+                if (!pUp.getName().equals("Teleport random")) {
+                    pair newpos = new pair(x + delta_x, y + delta_y);
+                    player.setLocation(newpos);
+                }
                 Server.sendUpdateToClients(createGamestateJSON(-1, false));
             } else {
                 pair newpos = new pair(x + delta_x, y + delta_y);
@@ -240,10 +249,8 @@ public class GameLogic {
     }
 
     public static PowerUp getPowerUpAt(int x, int y) {
-        for (PowerUp p : powerUpList) {
-            if (p.getXpos() == x && p.getYpos() == y) {
-                return p;
-            }
+        if (powerUpInGame.getXpos() == x && powerUpInGame.getYpos() == y) {
+            return powerUpInGame;
         }
         return null;
     }
@@ -277,14 +284,10 @@ public class GameLogic {
         }
         jsonObject.put("PointArray", jsonPointArray);
 
-        JSONArray jsonPowerUpArray = new JSONArray();
-        for (PowerUp powerUp : powerUpList) {
-            JSONObject JsonPowerUp = new JSONObject();
-            JsonPowerUp.put("X", powerUp.getXpos());
-            JsonPowerUp.put("Y", powerUp.getYpos());
-            jsonPowerUpArray.put(JsonPowerUp);
-        }
-        jsonObject.put("PowerUpArray", jsonPowerUpArray);
+        JSONObject JsonPowerUp = new JSONObject();
+        JsonPowerUp.put("X", powerUpInGame.getXpos());
+        JsonPowerUp.put("Y", powerUpInGame.getYpos());
+        jsonObject.put("PowerUpPosition", JsonPowerUp);
 
         return jsonObject;
     }

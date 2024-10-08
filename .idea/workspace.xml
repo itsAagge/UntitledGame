@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Join fix">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Shoot fix to be able to hit multiple players">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/game/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Client/game/Gui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Gui.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/GameLogic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/PowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/PowerUp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +30,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -62,6 +65,7 @@
     <MESSAGE value="PowerUp startmetoder" />
     <MESSAGE value="LocalDateTime fix" />
     <MESSAGE value="Join fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Join fix" />
+    <MESSAGE value="Shoot fix to be able to hit multiple players" />
+    <option name="LAST_COMMIT_MESSAGE" value="Shoot fix to be able to hit multiple players" />
   </component>
 </project>
