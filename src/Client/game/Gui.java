@@ -177,17 +177,18 @@ public class Gui extends Application {
 		});
 	}
 
-	public static void shoot(pair pos, String direction) {
+	public static void shoot(pair pos, String direction, boolean starShootingActive) {
 		Platform.runLater(() -> {
 			System.out.println("Shooting " + direction + " from x: " + pos.getX() + ", y: " + pos.getY());
 			
-			boolean shootingAnnulled = false;
-			boolean hitWall = false;
+
 			int x = pos.getX(), y = pos.getY();
 			int checkAt = 0;
 			pair shootHere = null;
-			
-			if (direction.equals("up")) {
+
+			if (direction.equals("up") || starShootingActive) {
+				boolean shootingAnnulled = false;
+				boolean hitWall = false;
 				checkAt = y - 1;
 				if (Generel.board[checkAt].charAt(x) != 'w') {
 					shootHere = new pair(x, checkAt);
@@ -211,7 +212,10 @@ public class Gui extends Application {
 				if (!shootingAnnulled) {
 					fields[x][++checkAt].setGraphic(new ImageView(shoot_up_hit));
 				}
-			} else if (direction.equals("down")) {
+			}
+			if (direction.equals("down") || starShootingActive) {
+				boolean shootingAnnulled = false;
+				boolean hitWall = false;
 				checkAt = y + 1;
 				if (Generel.board[checkAt].charAt(x) != 'w') {
 					shootHere = new pair(x, checkAt);
@@ -235,7 +239,10 @@ public class Gui extends Application {
 				if (!shootingAnnulled) {
 					fields[x][--checkAt].setGraphic(new ImageView(shoot_down_hit));
 				}
-			} else if (direction.equals("right")) {
+			}
+			if (direction.equals("right") || starShootingActive) {
+				boolean shootingAnnulled = false;
+				boolean hitWall = false;
 				checkAt = x + 1;
 				if (Generel.board[y].charAt(checkAt) != 'w') {
 					shootHere = new pair(checkAt, y);
@@ -259,7 +266,10 @@ public class Gui extends Application {
 				if (!shootingAnnulled) {
 					fields[--checkAt][y].setGraphic(new ImageView(shoot_right_hit));
 				}
-			} else if (direction.equals("left")) {
+			}
+			if (direction.equals("left") || starShootingActive) {
+				boolean shootingAnnulled = false;
+				boolean hitWall = false;
 				checkAt = x - 1;
 				if (Generel.board[y].charAt(checkAt) != 'w') {
 					shootHere = new pair(checkAt, y);

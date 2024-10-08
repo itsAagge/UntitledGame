@@ -39,6 +39,7 @@ public class Controller {
         playerPoints.clear();
         Gui.removeAllShots();
         pair shooterPair = null;
+        boolean starShootingActive = false;
         String shooterDirection = "";
         for (pair pair : playersOnScreen) {
             Gui.removePlayerOnScreen(pair);
@@ -54,6 +55,7 @@ public class Controller {
             if (jsonPlayer.getBoolean("PlayerShooting")) {
                 shooterPair = pos;
                 shooterDirection = direction;
+                starShootingActive = jsonPlayer.getBoolean("StarShootingActive");
             }
             playersOnScreen.add(pos);
             Gui.placePlayerOnScreen(pos, direction);
@@ -67,7 +69,7 @@ public class Controller {
         }
         Gui.updateScoreTable();
         if (shooterPair != null) {
-            Gui.shoot(shooterPair, shooterDirection);
+            Gui.shoot(shooterPair, shooterDirection, starShootingActive);
         }
     }
 

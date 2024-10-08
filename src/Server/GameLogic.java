@@ -8,7 +8,6 @@ import java.util.*;
 
 public class GameLogic {
     public static HashMap<Integer, ServerPlayer> players = new HashMap<>();
-
     public static ArrayList<PowerUp> powerUpList = new ArrayList<>();
 
     public synchronized static ServerPlayer addPlayer(String name) {
@@ -80,7 +79,7 @@ public class GameLogic {
                 p.setLocation(pa);
                 pair oldpos = new pair(x + delta_x, y + delta_y);
 
-                Server.sendUpdateToClients(createGamestateJSON(-1));
+                Server.sendUpdateToClients(createGamestateJSON(-1, false));
             } else if (pUp != null) {
                 if (pUp.getName().equals("Plus 10 points")) {
                     player.addPoints(10);
@@ -93,9 +92,9 @@ public class GameLogic {
                 } else if (pUp.getName().equals("Double speed")) {
                     player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
                     player.setPowerUpType("Double speed");
-                } else if (pUp.getName().equals("Ass shooting")) {
+                } else if (pUp.getName().equals("Star shooting")) {
                     player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
-                    player.setPowerUpType("Ass shooting");
+                    player.setPowerUpType("Star shooting");
                 }
             } else {
                 //player.addPoints(1);
@@ -103,7 +102,7 @@ public class GameLogic {
                 pair newpos = new pair(x + delta_x, y + delta_y);
                 player.setLocation(newpos);
 
-                Server.sendUpdateToClients(createGamestateJSON(-1));
+                Server.sendUpdateToClients(createGamestateJSON(-1, false));
             }
         }
     }
@@ -115,11 +114,16 @@ public class GameLogic {
         int x = player.getXpos(), y = player.getYpos();
         String direction = player.getDirection();
 
+        boolean starShootingActive = false;
+        if (player.getPowerUpType().equals("Star shooting") && player.getPowerUpTime().isAfter(LocalDateTime.now())) {
+            starShootingActive = true;
+        }
+
         int checkAt = 0;
         boolean hitWallOrPlayer = false;
         ServerPlayer playerHit = null;
 
-        if (direction.equals("up")) {
+        if (direction.equals("up") || starShootingActive) {
             checkAt = y - 1;
             while (!hitWallOrPlayer && checkAt >= 1) {
                 if (getPlayerAt(x, checkAt) != null) {
@@ -131,7 +135,8 @@ public class GameLogic {
                     checkAt--;
                 }
             }
-        } else if (direction.equals("down")) {
+        }
+        if (direction.equals("down") || starShootingActive) {
             checkAt = y + 1;
             while (!hitWallOrPlayer && checkAt <= 19) {
                 if (getPlayerAt(x, checkAt) != null) {
@@ -143,7 +148,8 @@ public class GameLogic {
                     checkAt++;
                 }
             }
-        } else if (direction.equals("right")) {
+        }
+        if (direction.equals("right") || starShootingActive) {
             checkAt = x + 1;
             while (!hitWallOrPlayer && checkAt <= 19) {
                 if (getPlayerAt(checkAt, y) != null) {
@@ -155,7 +161,8 @@ public class GameLogic {
                     checkAt++;
                 }
             }
-        } else if (direction.equals("left")) {
+        }
+        if (direction.equals("left") || starShootingActive) {
             checkAt = x - 1;
             while (!hitWallOrPlayer && checkAt >= 1) {
                 if (getPlayerAt(checkAt, y) != null) {
@@ -175,14 +182,14 @@ public class GameLogic {
             pair pa = getRandomFreePosition();
             playerHit.setLocation(pa);
         }
-        Server.sendUpdateToClients(createGamestateJSON(id));
+        Server.sendUpdateToClients(createGamestateJSON(id, starShootingActive));
         System.out.println("Shooting");
         try {
             Thread.sleep(300);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Server.sendUpdateToClients(createGamestateJSON(-1));
+        Server.sendUpdateToClients(createGamestateJSON(-1, false));
         System.out.println("Done");
     }
 
@@ -228,7 +235,7 @@ public class GameLogic {
         return null;
     }
 
-    public static JSONObject createGamestateJSON(int shooterId) {
+    public static JSONObject createGamestateJSON(int shooterId, boolean starShootingActive) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("MessageType", "Update");
         jsonObject.put("UpdateType", "Gamestate");
@@ -242,6 +249,7 @@ public class GameLogic {
             jsonPlayer.put("PlayerDirection", player.getDirection());
             boolean isShooting = player.getId() == shooterId;
             jsonPlayer.put("PlayerShooting", isShooting);
+            if (isShooting) jsonPlayer.put("StarShootingActive", starShootingActive);
             jsonPlayerArray.put(jsonPlayer);
         }
         jsonObject.put("PlayerArray", jsonPlayerArray);
