@@ -12,6 +12,8 @@ public class App {
 		String ip = inFromUser.readLine().trim();
 		System.out.println("Indtast port på server");
 		int port = Integer.parseInt(inFromUser.readLine().trim());
+		System.out.println("Indtast spillernavn");
+		playerName = inFromUser.readLine();
 
 		// Connects to the server
 		Socket clientSocket = new Socket(ip, port);
@@ -19,8 +21,6 @@ public class App {
 		// Sends the socket to the controller for communication with the server
 		Controller.startController(clientSocket);
 
-		System.out.println("Indtast spillernavn");
-		playerName = inFromUser.readLine();
 		Controller.requestPlayerAddToGame(playerName);
 		//GameLogic.makePlayers(navn); -- Tilføj spiller
 		Application.launch(Gui.class);
