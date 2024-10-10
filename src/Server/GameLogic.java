@@ -11,7 +11,7 @@ public class GameLogic {
     public static PowerUp powerUpInGame;
     public static boolean powerUpAdded = false;
     public static boolean powerUpActive = false;
-
+    public static NPC npcInGame;
     public synchronized static ServerPlayer addPlayer(String name) {
         pair p = getRandomFreePosition();
         System.out.println("Position to add = x: " + p.x + ", y: " + p.y);
@@ -219,6 +219,49 @@ public class GameLogic {
         System.out.println("Done");
     }
 
+    public static void addNPC() {
+        if (npcInGame == null || !npcInGame.isAlive()) {
+            pair p = getRandomFreePosition();
+            npcInGame = new NPC(p);
+            NPCThread npcThread = new NPCThread(npcInGame);
+            npcThread.start();
+        }
+    }
+
+    public static boolean[] getNPCSurroundings() {
+        pair location = npcInGame.getLocation();
+        boolean[] surroundings = new boolean[4];
+        surroundings[0] = Generel.board[location.getY() - 1].charAt(location.getX()) == ' '; // above
+        surroundings[1] = Generel.board[location.getY()].charAt(location.getX() + 1) == ' '; // to the right
+        surroundings[2] = Generel.board[location.getY() + 1].charAt(location.getX()) == ' '; // below
+        surroundings[3] = Generel.board[location.getY()].charAt(location.getX() - 1) == ' '; // to the left
+        return surroundings;
+    }
+
+    public static void moveNPC(int delta_x, int delta_y, String direction) {
+        pair location = npcInGame.getLocation();
+        npcInGame.setDirection(direction);
+        int x = location.getX(), y = location.getY();
+
+        if (Generel.board[y + delta_y].charAt(x + delta_x) != 'w') { // redundant - also checked in NPCThread
+            // collision detection
+            ServerPlayer p = getPlayerAt(x + delta_x, y + delta_y);
+            if (p != null) {
+                //update the hit player
+                p.addPoints(-15);
+                pair pa = getRandomFreePosition();
+                p.setLocation(pa);
+                pair newpos = new pair(x + delta_x, y + delta_y);
+                npcInGame.setLocation(newpos);
+                Server.sendUpdateToClients(createGamestateJSON(-1, false));
+            } else {
+                pair newpos = new pair(x + delta_x, y + delta_y);
+                npcInGame.setLocation(newpos);
+                Server.sendUpdateToClients(createGamestateJSON(-1, false));
+            }
+        }
+    }
+
     public static int reverseDelta(int delta) {
         int newDelta = 0;
         if (delta == 1) {
@@ -297,6 +340,16 @@ public class GameLogic {
             JsonPowerUp.put("PowerUpPosition", JsonPowerUpPos);
         }
         jsonObject.put("PowerUp", JsonPowerUp);
+
+        boolean npcAlive = npcInGame != null && npcInGame.isAlive();
+        JSONObject jsonNPC = new JSONObject();
+        jsonNPC.put("isAlive", npcAlive);
+        if (npcAlive) {
+            jsonNPC.put("NPCXPos", npcInGame.getLocation().getX());
+            jsonNPC.put("NPCYPos", npcInGame.getLocation().getY());
+            jsonNPC.put("NPCDirection", npcInGame.getDirection());
+        }
+        jsonObject.put("NPC", jsonNPC);
 
         return jsonObject;
     }

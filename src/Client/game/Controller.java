@@ -1,5 +1,6 @@
 package Client.game;
 
+import Server.NPC;
 import Server.PowerUp;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,6 +19,7 @@ public class Controller {
     private static ArrayList<String> playerPoints = new ArrayList<>();
     public static ArrayList<pair> tempShotPairs = new ArrayList<>();
     public static pair powerUp = new pair(1,1);
+    public static pair npcOnGui;
 
     public static void startController(Socket clientSocket) throws Exception {
         Controller.clientSocket = clientSocket;
@@ -37,7 +39,9 @@ public class Controller {
     public static void updateGamestate(String gamestate) {
         System.out.println(gamestate);
         JSONObject jsonObject = new JSONObject(gamestate);
-
+        if (npcOnGui != null) {
+            Gui.removePlayerOnScreen(npcOnGui);
+        }
         Gui.removePowerUp(powerUp);
         playerPoints.clear();
         Gui.removeAllShots();
@@ -82,6 +86,14 @@ public class Controller {
             pair p = new pair(x, y);
             powerUp = p;
             Gui.placePowerUp(p);
+        }
+        JSONObject jsonNPC = jsonObject.getJSONObject("NPC");
+        if (jsonNPC.getBoolean("isAlive")) {
+            int x = jsonNPC.getInt("NPCXPos");
+            int y = jsonNPC.getInt("NPCYPos");
+            String direction = jsonNPC.getString("NPCDirection");
+            npcOnGui = new pair(x,y);
+            Gui.placePlayerOnScreen(npcOnGui, direction);
         }
     }
 

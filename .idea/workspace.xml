@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="PowerUp fix">
-      <change afterPath="$PROJECT_DIR$/src/Server/AddNewPowerUpThread.java" afterDir="false" />
+    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Moved the gamestate update to GameLogic">
+      <change afterPath="$PROJECT_DIR$/src/Server/NPC.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Server/NPCThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client/game/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/game/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/GameLogic.java" afterDir="false" />
@@ -53,7 +54,24 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="Client.game" />
+      <recent name="Client.game.Image" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="package update" />
@@ -66,6 +84,8 @@
     <MESSAGE value="Join fix" />
     <MESSAGE value="Shoot fix to be able to hit multiple players" />
     <MESSAGE value="PowerUp fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="PowerUp fix" />
+    <MESSAGE value="New PowerUp now spawns after random time after pickup" />
+    <MESSAGE value="Moved the gamestate update to GameLogic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved the gamestate update to GameLogic" />
   </component>
 </project>
