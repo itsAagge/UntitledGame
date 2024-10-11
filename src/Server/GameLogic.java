@@ -178,7 +178,7 @@ public class GameLogic {
                 if (getPlayerAt(checkAt, y) != null) {
                     hitWallOrPlayer = true;
                     playersHitArrayList.add(getPlayerAt(checkAt, y));
-                } else if (Generel.board[x].charAt(checkAt) == 'w') {
+                } else if (Generel.board[y].charAt(checkAt) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
                     checkAt++;
@@ -192,7 +192,7 @@ public class GameLogic {
                 if (getPlayerAt(checkAt, y) != null) {
                     hitWallOrPlayer = true;
                     playersHitArrayList.add(getPlayerAt(checkAt, y));
-                } else if (Generel.board[x].charAt(checkAt) == 'w') {
+                } else if (Generel.board[y].charAt(checkAt) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
                     checkAt--;
