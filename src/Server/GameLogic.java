@@ -21,7 +21,9 @@ public class GameLogic {
             newPowerUp();
             powerUpAdded = true;
         }
-        addNPC();
+        if (npcInGame == null) {
+            addNPC();
+        }
         return player;
     }
 
