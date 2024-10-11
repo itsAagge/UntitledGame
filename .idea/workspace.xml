@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="NPC Version 1.0" />
+    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Npc spawn fix">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/GameLogic.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -82,6 +85,7 @@
     <MESSAGE value="Moved the gamestate update to GameLogic" />
     <MESSAGE value="Shoot fix" />
     <MESSAGE value="NPC Version 1.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="NPC Version 1.0" />
+    <MESSAGE value="Npc spawn fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Npc spawn fix" />
   </component>
 </project>

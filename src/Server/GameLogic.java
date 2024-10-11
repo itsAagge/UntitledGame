@@ -79,61 +79,63 @@ public class GameLogic {
         }
         int x = player.getXpos(), y = player.getYpos();
 
-        if (Generel.board[y + delta_y].charAt(x + delta_x) == 'w') {
-            //player.addPoints(-1);
-        } else {
-            // collision detection
-            ServerPlayer p = getPlayerAt(x + delta_x, y + delta_y);
-            PowerUp pUp = getPowerUpAt(x + delta_x, y + delta_y);
-            NPC npc = getNPCAt(x + delta_x, y + delta_y);
-            if (p != null) {
-                player.addPoints(14);
-                //update the other player
-                p.addPoints(-7);
-                pair pa = getRandomFreePosition();
-                p.setLocation(pa);
-                pair newpos = new pair(x + delta_x, y + delta_y);
-                player.setLocation(newpos);
-                Server.sendUpdateToClients(createGamestateJSON(-1, false));
-            } else if (pUp != null && powerUpActive) {
-                if (pUp.getName().equals("Plus 10 points")) {
-                    player.addPoints(10);
-                    System.out.println("10 point picked up");
-                } else if (pUp.getName().equals("Teleport random")) {
+        if (x + delta_x < 20 && x + delta_x > 1 && y + delta_y < 20 && y + delta_y > 1) { // To avoid ArrayOutOfBounds, when a player has the "Double Speed" Power Up
+            if (Generel.board[y + delta_y].charAt(x + delta_x) == 'w') {
+                //player hit a wall
+            } else {
+                // collision detection
+                ServerPlayer p = getPlayerAt(x + delta_x, y + delta_y);
+                PowerUp pUp = getPowerUpAt(x + delta_x, y + delta_y);
+                NPC npc = getNPCAt(x + delta_x, y + delta_y);
+                if (p != null) {
+                    player.addPoints(14);
+                    //update the other player
+                    p.addPoints(-7);
                     pair pa = getRandomFreePosition();
-                    player.setLocation(pa);
-                    System.out.println("Teleport random picked up");
-                } else if (pUp.getName().equals("Reverse controls")) {
-                    player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
-                    player.setPowerUpType("Reverse controls");
-                    System.out.println("Reverse controls picked up");
-                } else if (pUp.getName().equals("Double speed")) {
-                    player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
-                    player.setPowerUpType("Double speed");
-                    System.out.println("Double speed picked up");
-                } else if (pUp.getName().equals("Star shooting")) {
-                    player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
-                    player.setPowerUpType("Star shooting");
-                    System.out.println("Star shooting picked up");
-                }
-                AddNewPowerUpThread t1 = new AddNewPowerUpThread();
-                t1.start();
-                powerUpActive = false;
-                if (!pUp.getName().equals("Teleport random")) {
+                    p.setLocation(pa);
                     pair newpos = new pair(x + delta_x, y + delta_y);
                     player.setLocation(newpos);
+                    Server.sendUpdateToClients(createGamestateJSON(-1, false));
+                } else if (pUp != null && powerUpActive) {
+                    if (pUp.getName().equals("Plus 10 points")) {
+                        player.addPoints(10);
+                        System.out.println("10 point picked up");
+                    } else if (pUp.getName().equals("Teleport random")) {
+                        pair pa = getRandomFreePosition();
+                        player.setLocation(pa);
+                        System.out.println("Teleport random picked up");
+                    } else if (pUp.getName().equals("Reverse controls")) {
+                        player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
+                        player.setPowerUpType("Reverse controls");
+                        System.out.println("Reverse controls picked up");
+                    } else if (pUp.getName().equals("Double speed")) {
+                        player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
+                        player.setPowerUpType("Double speed");
+                        System.out.println("Double speed picked up");
+                    } else if (pUp.getName().equals("Star shooting")) {
+                        player.setPowerUpTime(LocalDateTime.now().plusSeconds(15));
+                        player.setPowerUpType("Star shooting");
+                        System.out.println("Star shooting picked up");
+                    }
+                    AddNewPowerUpThread t1 = new AddNewPowerUpThread();
+                    t1.start();
+                    powerUpActive = false;
+                    if (!pUp.getName().equals("Teleport random")) {
+                        pair newpos = new pair(x + delta_x, y + delta_y);
+                        player.setLocation(newpos);
+                    }
+                    Server.sendUpdateToClients(createGamestateJSON(-1, false));
+                } else if (npc != null && npc.isAlive()) {
+                    npc.kill();
+                    player.addPoints(5);
+                    pair newpos = new pair(x + delta_x, y + delta_y);
+                    player.setLocation(newpos);
+                    Server.sendUpdateToClients(createGamestateJSON(-1, false));
+                } else {
+                    pair newpos = new pair(x + delta_x, y + delta_y);
+                    player.setLocation(newpos);
+                    Server.sendUpdateToClients(createGamestateJSON(-1, false));
                 }
-                Server.sendUpdateToClients(createGamestateJSON(-1, false));
-            } else if (npc != null && npc.isAlive()) {
-                npc.kill();
-                player.addPoints(5);
-                pair newpos = new pair(x + delta_x, y + delta_y);
-                player.setLocation(newpos);
-                Server.sendUpdateToClients(createGamestateJSON(-1, false));
-            } else {
-                pair newpos = new pair(x + delta_x, y + delta_y);
-                player.setLocation(newpos);
-                Server.sendUpdateToClients(createGamestateJSON(-1, false));
             }
         }
     }
