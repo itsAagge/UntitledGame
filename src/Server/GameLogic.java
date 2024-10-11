@@ -79,7 +79,7 @@ public class GameLogic {
         }
         int x = player.getXpos(), y = player.getYpos();
 
-        if (x + delta_x < 20 && x + delta_x > 1 && y + delta_y < 20 && y + delta_y > 1) { // To avoid ArrayOutOfBounds, when a player has the "Double Speed" Power Up
+        if (x + delta_x < 19 && x + delta_x > 0 && y + delta_y < 19 && y + delta_y > 0) { // To avoid ArrayOutOfBounds, when a player has the "Double Speed" Power Up
             if (Generel.board[y + delta_y].charAt(x + delta_x) == 'w') {
                 //player hit a wall
             } else {
