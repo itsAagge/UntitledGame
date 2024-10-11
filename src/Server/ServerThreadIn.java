@@ -22,7 +22,7 @@ public class ServerThreadIn extends Thread{
 			String playerName = jsonObjectAddPlayerRequest.getString("PlayerName");
 
 			// Adds the player
-			ServerPlayer player = GameLogic.addPlayer(playerName);
+			Player player = GameLogic.addPlayer(playerName);
 
 			JSONObject jsonObjectAddPlayerResponse = new JSONObject();
 			jsonObjectAddPlayerResponse.put("MessageType", "Request");

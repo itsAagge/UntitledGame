@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class GameLogic {
-    public static HashMap<Integer, ServerPlayer> players = new HashMap<>();
+    public static HashMap<Integer, Player> players = new HashMap<>();
     public static PowerUp powerUpInGame;
     public static boolean powerUpAdded = false;
     public static boolean powerUpActive = false;
     public static NPC npcInGame;
-    public synchronized static ServerPlayer addPlayer(String name) {
+    public synchronized static Player addPlayer(String name) {
         pair p = getRandomFreePosition();
         System.out.println("Position to add = x: " + p.x + ", y: " + p.y);
-        ServerPlayer player = new ServerPlayer(name, p, "up");
+        Player player = new Player(name, p, "up");
         players.put(player.getId(), player);
         if (!powerUpAdded) {
             newPowerUp();
@@ -49,7 +49,7 @@ public class GameLogic {
             if (Generel.board[y].charAt(x) == ' ') // er det gulv ?
             {
                 foundfreepos = true;
-                for (ServerPlayer p : players.values()) {
+                for (Player p : players.values()) {
                     if (p.getXpos() == x && p.getYpos() == y) //pladsen optaget af en anden
                         foundfreepos = false;
                 }
@@ -63,7 +63,7 @@ public class GameLogic {
     }
 
     public synchronized static void updatePlayer(int id, int delta_x, int delta_y, String direction) {
-        ServerPlayer player = players.get(id);
+        Player player = players.get(id);
         if (player == null) throw new IllegalArgumentException("Player doesn't exist");
 
         player.direction = direction;
@@ -84,7 +84,7 @@ public class GameLogic {
                 //player hit a wall
             } else {
                 // collision detection
-                ServerPlayer p = getPlayerAt(x + delta_x, y + delta_y);
+                Player p = getPlayerAt(x + delta_x, y + delta_y);
                 PowerUp pUp = getPowerUpAt(x + delta_x, y + delta_y);
                 NPC npc = getNPCAt(x + delta_x, y + delta_y);
                 if (p != null) {
@@ -141,7 +141,7 @@ public class GameLogic {
     }
 
     public synchronized static void shoot(int id) {
-        ServerPlayer player = players.get(id);
+        Player player = players.get(id);
         if (player == null) throw new IllegalArgumentException("Player doesn't exist");
 
         int x = player.getXpos(), y = player.getYpos();
@@ -153,7 +153,7 @@ public class GameLogic {
         }
 
         int checkAt = 0;
-        ArrayList<ServerPlayer> playersHitArrayList = new ArrayList<ServerPlayer>();
+        ArrayList<Player> playersHitArrayList = new ArrayList<Player>();
         boolean npcHit = false;
 
         if (direction.equals("up") || starShootingActive) {
@@ -226,7 +226,7 @@ public class GameLogic {
         }
         if (!playersHitArrayList.isEmpty()) {
             player.addPoints(10);
-            for (ServerPlayer playerHit : playersHitArrayList) {
+            for (Player playerHit : playersHitArrayList) {
                 playerHit.addPoints(-5);
 
                 pair pa = getRandomFreePosition();
@@ -274,7 +274,7 @@ public class GameLogic {
 
         if (Generel.board[y + delta_y].charAt(x + delta_x) != 'w') { // redundant - also checked in NPCThread
             // collision detection
-            ServerPlayer p = getPlayerAt(x + delta_x, y + delta_y);
+            Player p = getPlayerAt(x + delta_x, y + delta_y);
             if (p != null) {
                 //update the hit player
                 p.addPoints(-30);
@@ -315,8 +315,8 @@ public class GameLogic {
         return newDirection;
     }
 
-    public static ServerPlayer getPlayerAt(int x, int y) {
-        for (ServerPlayer p : players.values()) {
+    public static Player getPlayerAt(int x, int y) {
+        for (Player p : players.values()) {
             if (p.getXpos() == x && p.getYpos() == y) {
                 return p;
             }
@@ -345,7 +345,7 @@ public class GameLogic {
 
         //JSON Array for the players
         JSONArray jsonPlayerArray = new JSONArray();
-        for (ServerPlayer player : players.values()) {
+        for (Player player : players.values()) {
             JSONObject jsonPlayer = new JSONObject();
             jsonPlayer.put("PlayerXPos", player.getXpos());
             jsonPlayer.put("PlayerYPos", player.getYpos());
@@ -359,7 +359,7 @@ public class GameLogic {
 
         //JSON Array for the points
         JSONArray jsonPointArray = new JSONArray();
-        for (ServerPlayer player : players.values()) {
+        for (Player player : players.values()) {
             JSONObject jsonPoint = new JSONObject();
             jsonPoint.put("PlayerName", player.getName());
             jsonPoint.put("PlayerPoints", player.getPoints());

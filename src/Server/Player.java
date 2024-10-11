@@ -2,7 +2,7 @@ package Server;
 
 import java.time.LocalDateTime;
 
-public class ServerPlayer {
+public class Player {
     String name;
     pair location;
     int points;
@@ -12,7 +12,7 @@ public class ServerPlayer {
     LocalDateTime powerUpTime;
     String powerUpType;
 
-    public ServerPlayer(String name, pair loc, String direction) {
+    public Player(String name, pair loc, String direction) {
         this.name = name;
         this.location = loc;
         this.direction = direction;

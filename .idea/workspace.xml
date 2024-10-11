@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Npc spawn fix">
+    <list default="true" id="2c15617f-66a1-4299-b12c-6a7a69a80bed" name="Changes" comment="Updated ArrayOutOfBounds exception prevention values">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/GameLogic.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +85,8 @@
     <MESSAGE value="Shoot fix" />
     <MESSAGE value="NPC Version 1.0" />
     <MESSAGE value="Npc spawn fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Npc spawn fix" />
+    <MESSAGE value="ArrayOutOfBounds exception prevention" />
+    <MESSAGE value="Updated ArrayOutOfBounds exception prevention values" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated ArrayOutOfBounds exception prevention values" />
   </component>
 </project>
