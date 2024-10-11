@@ -21,6 +21,7 @@ public class GameLogic {
             newPowerUp();
             powerUpAdded = true;
         }
+        addNPC();
         return player;
     }
 
@@ -82,6 +83,7 @@ public class GameLogic {
             // collision detection
             ServerPlayer p = getPlayerAt(x + delta_x, y + delta_y);
             PowerUp pUp = getPowerUpAt(x + delta_x, y + delta_y);
+            NPC npc = getNPCAt(x + delta_x, y + delta_y);
             if (p != null) {
                 player.addPoints(14);
                 //update the other player
@@ -120,6 +122,12 @@ public class GameLogic {
                     player.setLocation(newpos);
                 }
                 Server.sendUpdateToClients(createGamestateJSON(-1, false));
+            } else if (npc != null && npc.isAlive()) {
+                npc.kill();
+                player.addPoints(5);
+                pair newpos = new pair(x + delta_x, y + delta_y);
+                player.setLocation(newpos);
+                Server.sendUpdateToClients(createGamestateJSON(-1, false));
             } else {
                 pair newpos = new pair(x + delta_x, y + delta_y);
                 player.setLocation(newpos);
@@ -142,6 +150,7 @@ public class GameLogic {
 
         int checkAt = 0;
         ArrayList<ServerPlayer> playersHitArrayList = new ArrayList<ServerPlayer>();
+        boolean npcHit = false;
 
         if (direction.equals("up") || starShootingActive) {
             boolean hitWallOrPlayer = false;
@@ -150,6 +159,9 @@ public class GameLogic {
                 if (getPlayerAt(x, checkAt) != null) {
                     hitWallOrPlayer = true;
                     playersHitArrayList.add(getPlayerAt(x, checkAt));
+                } else if (getNPCAt(x, checkAt) != null) {
+                    hitWallOrPlayer = true;
+                    npcHit = true;
                 } else if (Generel.board[checkAt].charAt(x) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
@@ -164,6 +176,9 @@ public class GameLogic {
                 if (getPlayerAt(x, checkAt) != null) {
                     hitWallOrPlayer = true;
                     playersHitArrayList.add(getPlayerAt(x, checkAt));
+                } else if (getNPCAt(x, checkAt) != null) {
+                    hitWallOrPlayer = true;
+                    npcHit = true;
                 } else if (Generel.board[checkAt].charAt(x) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
@@ -178,6 +193,9 @@ public class GameLogic {
                 if (getPlayerAt(checkAt, y) != null) {
                     hitWallOrPlayer = true;
                     playersHitArrayList.add(getPlayerAt(checkAt, y));
+                } else if (getNPCAt(checkAt, y) != null) {
+                    hitWallOrPlayer = true;
+                    npcHit = true;
                 } else if (Generel.board[y].charAt(checkAt) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
@@ -192,6 +210,9 @@ public class GameLogic {
                 if (getPlayerAt(checkAt, y) != null) {
                     hitWallOrPlayer = true;
                     playersHitArrayList.add(getPlayerAt(checkAt, y));
+                } else if (getNPCAt(checkAt, y) != null) {
+                    hitWallOrPlayer = true;
+                    npcHit = true;
                 } else if (Generel.board[y].charAt(checkAt) == 'w') {
                     hitWallOrPlayer = true;
                 } else {
@@ -207,6 +228,10 @@ public class GameLogic {
                 pair pa = getRandomFreePosition();
                 playerHit.setLocation(pa);
             }
+        }
+        if (npcHit) {
+            npcInGame.kill();
+            player.addPoints(5);
         }
         Server.sendUpdateToClients(createGamestateJSON(id, starShootingActive));
         System.out.println("Shooting");
@@ -248,7 +273,7 @@ public class GameLogic {
             ServerPlayer p = getPlayerAt(x + delta_x, y + delta_y);
             if (p != null) {
                 //update the hit player
-                p.addPoints(-15);
+                p.addPoints(-30);
                 pair pa = getRandomFreePosition();
                 p.setLocation(pa);
                 pair newpos = new pair(x + delta_x, y + delta_y);
@@ -298,6 +323,13 @@ public class GameLogic {
     public static PowerUp getPowerUpAt(int x, int y) {
         if (powerUpInGame.getXpos() == x && powerUpInGame.getYpos() == y) {
             return powerUpInGame;
+        }
+        return null;
+    }
+
+    public static NPC getNPCAt(int x, int y) {
+        if (npcInGame.getLocation().getX() == x && npcInGame.getLocation().getY() == y) {
+            return npcInGame;
         }
         return null;
     }

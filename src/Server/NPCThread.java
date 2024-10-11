@@ -33,11 +33,7 @@ public class NPCThread extends Thread {
             }
         }
 
-
-
-
-
-        double r = Math.random() * 10000;
+        double r = 10000 + Math.random() * 10000;
         try {
             Thread.sleep((long) r);
         } catch (InterruptedException e) {
